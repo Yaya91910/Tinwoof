@@ -52,10 +52,36 @@ h1 {
 }
 
 .form-message {
-  top: 82vh;
-  position: fixed;
+  top: 81vh;
+  right:3px;
+  position: absolute;
 }
 
 .input-group .btn {
-  bottom: 1vh
+  bottom: 1vh;
+  background-color: #B9005B;
+}
+
+.form-control {
+  height: 45px
+}
+
+.card-message {
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.card-message p {
+  font-size: 14px;
+  opacity: 1;
+  margin-left: 5px;
+  color: #B9005B
+}
+
+.title-message {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
 }
