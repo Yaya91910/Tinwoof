@@ -31,11 +31,16 @@ body{
 
   <% @dogs.each do |dog| %>
   <% dog.comments.each do |comment| %>
-  <div class="carda">
-  <p class="contentcaroussel">"<%= comment.content %>"</p>
-  <p class="content2"> <i class="fa-solid fa-dog"></i> <%= dog.name %></p>
-  <p class="content2"> <i class="fa-regular fa-user"></i>  <%= comment.user.first_name %></p>
-  </div>
+    <div class="carda">
+        <p class="contentcaroussel">"<%= comment.content %>"</p>
+        <p class="content2"> <i class="fa-solid fa-dog"></i> <%= dog.name %></p>
+    <div class="d-flex justify-content-between">
+      <p class="content2"> <i class="fa-regular fa-user"></i>  <%= comment.user.first_name %></p>
+      <%= link_to dog_path(dog.id), class:"finitooo" do%>
+      <i class="fa-solid fa-eye"></i>
+      <% end %>
+      </div>
+    </div>
 <% end %>
 <% end %>
 </div>
@@ -47,11 +52,16 @@ body{
 <hr>
 <div class="divphotos d-flex justify-content-center">
 <% @dogs.each do |dog| %>
+<% if dog.photos.first.nil?  %>
+<p>No Picture</p>
+<% else %>
  <%= link_to edit_dog_path(dog), class: "superlink" do%>
   <%= cl_image_tag dog.photos.first.key, crop: :fill, :class => "imgdog" %>
+  <% end %>
 <% end %>
 <% end %>
 </div>
+
 <div class="d-flex justify-content-center">
   <%= link_to destroy_user_session_path, data: {turbo_method: :delete} do %>
     <i class="fa-solid fa-right-from-bracket"></i>
