@@ -108,7 +108,7 @@
   <% end %>
 
   <div class="danger-zone">
-    <%= button_to destroy_user_session_path, method: :delete, class: "btn btn--ghost btn--block", form: { data: { turbo: false } } do %>
+    <%= button_to destroy_user_session_path, method: :delete, class: "btn btn--ghost btn--block" do %>
       <%= icon "arrow-right-from-bracket" %> Se déconnecter
     <% end %>
   </div>
