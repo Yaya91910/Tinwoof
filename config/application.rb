@@ -16,6 +16,10 @@ module Tinwoof
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.2
 
+    # The service worker caches assets: keep it out of development, where assets change constantly.
+    # Set SERVICE_WORKER=1 to try the offline/installable experience locally.
+    config.x.service_worker = Rails.env.production? || ENV["SERVICE_WORKER"].present?
+
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.

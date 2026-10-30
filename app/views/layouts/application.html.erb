@@ -13,6 +13,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Tinwoof">
     <meta name="view-transition" content="same-origin">
+    <meta name="service-worker" content="<%= Rails.configuration.x.service_worker ? "enabled" : "disabled" %>">
     <% if user_signed_in? %>
       <meta name="current-user-id" content="<%= current_user.id %>">
     <% end %>

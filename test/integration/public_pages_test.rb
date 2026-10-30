@@ -29,7 +29,23 @@ class PublicPagesTest < ActionDispatch::IntegrationTest
     get pwa_service_worker_path
     assert_response :success
     assert_equal "text/javascript", response.media_type
+  end
+
+  test "the service worker stays off outside production" do
+    get root_path
+    assert_select "meta[name='service-worker'][content='disabled']"
+
+    # A worker installed earlier is replaced by one that removes itself.
+    get pwa_service_worker_path
+    assert_includes response.body, "self.registration.unregister()"
+  end
+
+  test "the full service worker is served when enabled" do
+    Rails.configuration.x.service_worker = true
+    get pwa_service_worker_path
     assert_includes response.body, "/offline"
+  ensure
+    Rails.configuration.x.service_worker = false
   end
 
   test "offline page is public" do
