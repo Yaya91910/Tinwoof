@@ -1,7 +1,7 @@
 <% content_for :title, "Mon compte" %>
 <%= render "shared/app_header", title: "Mon compte", back: profile_path %>
 <div class="container">
-  <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: "form" }, data: { turbo: false }) do |f| %>
+  <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: "form" }) do |f| %>
     <%= render "devise/shared/error_messages", resource: resource %>
     <fieldset class="form__group">
       <legend class="form__legend">Identité</legend>
@@ -31,6 +31,6 @@
   <div class="danger-zone">
     <p class="section__hint">Supprimer votre compte efface aussi vos chiens, matchs et messages.</p>
     <%= button_to "Supprimer mon compte", registration_path(resource_name), method: :delete, class: "btn btn--danger btn--block",
-                  form: { data: { turbo_confirm: "Supprimer définitivement votre compte ?", turbo: false } } %>
+                  form: { data: { turbo_confirm: "Supprimer définitivement votre compte ?" } } %>
   </div>
 </div>
