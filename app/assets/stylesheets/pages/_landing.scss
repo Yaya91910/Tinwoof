@@ -154,3 +154,22 @@
   color: var(--ink-3);
   font-size: 0.85rem;
 }
+
+// Social proof under the hero.
+.proof {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin: -26px var(--gutter) 0;
+  padding: 16px 8px;
+  position: relative;
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-2);
+  text-align: center;
+}
+.proof__item {
+  display: grid;
+  & + & { border-left: 1px solid var(--line); }
+  strong { font-family: var(--font-display); font-size: 1.6rem; font-weight: 800; background: var(--brand-gradient); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  span { color: var(--ink-2); font-size: 0.78rem; font-weight: 600; }
+}

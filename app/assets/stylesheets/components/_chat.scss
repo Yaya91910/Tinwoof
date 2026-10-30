@@ -126,3 +126,12 @@
   &:active { transform: scale(0.88); }
 }
 .composer__error { flex-basis: 100%; margin: 0 8px; }
+
+.chat__seen {
+  margin: 2px 6px 0 auto;
+  width: fit-content;
+  color: var(--ink-3);
+  font-size: 0.72rem;
+  font-weight: 600;
+  i { color: var(--brand); }
+}

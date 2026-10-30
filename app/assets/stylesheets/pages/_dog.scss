@@ -83,6 +83,7 @@
 
 .owner {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
@@ -91,6 +92,36 @@
   background: var(--surface);
   box-shadow: var(--shadow-1);
 }
-.owner__link { display: flex; align-items: center; gap: 12px; min-width: 0; }
-.owner__name { display: block; font-weight: 800; font-family: var(--font-display); font-size: 1.1rem; }
+.owner__link { display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1 1 auto; }
+.owner__name {
+  display: block;
+  overflow: hidden;
+  font-weight: 800;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .owner__status { display: block; color: var(--ink-3); font-size: 0.8rem; }
+
+// Like / Super Like from a dog's profile.
+.crush {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: 10px;
+  margin-top: 22px;
+
+  .btn { width: 100%; padding: 0 14px; overflow: hidden; text-overflow: ellipsis; }
+}
+.crush__done {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  background: var(--brand-soft);
+  color: var(--brand-strong);
+  font-weight: 600;
+  font-size: 0.92rem;
+}

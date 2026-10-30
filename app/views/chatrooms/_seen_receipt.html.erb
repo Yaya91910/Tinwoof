@@ -1,0 +1,7 @@
+<%# locals: (reader:, seen_at:) -%>
+<p id="seen_receipt" class="chat__seen" hidden
+   data-controller="seen-receipt"
+   data-seen-receipt-reader-id-value="<%= reader.id %>"
+   data-seen-receipt-seen-at-value="<%= seen_at&.iso8601(3) %>">
+  <%= icon "check-double" %> Vu
+</p>

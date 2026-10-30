@@ -9,11 +9,11 @@ class MessageTest < ActiveSupport::TestCase
     assert_not message.valid?
   end
 
-  test "posting broadcasts the message and refreshes the recipient's badge" do
+  test "posting broadcasts the message, refreshes the recipient's badge and notifies them" do
     chatroom = chatrooms(:alice_bob)
 
     assert_broadcasts(stream_name_from(chatroom), 1) do
-      assert_broadcasts(stream_name_from([users(:bob), :inbox]), 1) do
+      assert_broadcasts(stream_name_from([users(:bob), :inbox]), 2) do
         chatroom.messages.create!(user: users(:alice), content: "Samedi 10 h ?")
       end
     end

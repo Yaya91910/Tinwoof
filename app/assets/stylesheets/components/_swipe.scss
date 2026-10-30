@@ -117,3 +117,101 @@
 }
 .stamp--like { left: 24px; color: #ff4d6d; background: rgba(255, 255, 255, 0.9); transform: rotate(-14deg); opacity: var(--like); }
 .stamp--nope { right: 24px; color: #5b6472; background: rgba(255, 255, 255, 0.9); transform: rotate(14deg); opacity: var(--nope); }
+
+// Story-like photo progress at the top of a card.
+.swipe-card__progress {
+  position: absolute;
+  z-index: 2;
+  top: 10px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  gap: 4px;
+  pointer-events: none;
+
+  span {
+    flex: 1;
+    height: 4px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.4);
+    &.is-active { background: #fff; }
+  }
+}
+
+// "X a craqué pour Pixel": the owner of this dog already likes you.
+.swipe-card__admirer {
+  position: absolute;
+  z-index: 2;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: calc(100% - 32px);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 77, 109, 0.92);
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-shadow: 0 6px 18px rgba(232, 62, 100, 0.4);
+  pointer-events: none;
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+.swipe-card__admirer--super { background: linear-gradient(135deg, #2f80ff, #6a5cff); box-shadow: 0 6px 18px rgba(47, 128, 255, 0.45); }
+.swipe-card--super { box-shadow: 0 0 0 3px #4f7dff, var(--shadow-2); }
+
+.swipe-card__more {
+  position: absolute;
+  right: 16px;
+  bottom: 20px;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.22);
+  color: #fff;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.stamp--super {
+  left: 50%;
+  top: auto;
+  bottom: 38%;
+  color: #2f80ff;
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateX(-50%) rotate(-6deg);
+  opacity: var(--super, 0);
+}
+
+.swipe-btn--small { width: 48px; height: 48px; font-size: 1.15rem; }
+.swipe-btn--undo { color: var(--sun); }
+.swipe-btn--super { position: relative; color: #2f80ff; }
+.swipe-btn:disabled { opacity: 0.4; pointer-events: none; }
+.swipe-btn__count {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  display: grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border: 2px solid var(--bg);
+  border-radius: var(--radius-full);
+  background: #2f80ff;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.deck__actions { gap: 16px; }
+
+@keyframes pulse-glow { 50% { transform: translateX(-50%) scale(1.04); } }

@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 import { Turbo } from "@hotwired/turbo-rails"
-import { loadMapLibre, mapStyle } from "../lib/maplibre"
+import { FRENCH_LOCALE, loadMapLibre, mapStyle } from "../lib/maplibre"
 
 const PARIS = [2.3522, 48.8566]
 const BRAND = "#ff4d6d"
@@ -32,7 +32,8 @@ export default class extends Controller {
       zoom: this.hasZoomValue ? this.zoomValue : (this.#explore ? 12.5 : 14),
       pitch: this.#explore ? 30 : 0,
       attributionControl: false,
-      cooperativeGestures: !this.#explore
+      cooperativeGestures: !this.#explore,
+      locale: FRENCH_LOCALE
     })
     this.map.addControl(new maplibregl.AttributionControl({ compact: true }))
 

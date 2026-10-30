@@ -31,12 +31,25 @@ class Chatroom < ApplicationRecord
   end
 
   def mark_read_for!(user)
-    messages.unread.where.not(user: user).update_all(read_at: Time.current)
+    count = messages.unread.where.not(user: user).update_all(read_at: Time.current)
+    broadcast_seen_by(user) if count.positive?
+    count
+  end
+
+  # When `reader` last read what the other participant wrote.
+  def seen_at_by(reader)
+    messages.where.not(user: reader).maximum(:read_at)
   end
 
   private
 
   def participants_are_distinct
     errors.add(:second_user, :invalid) if first_user_id == second_user_id
+  end
+
+  # The sender sees "Vu" appear live under their last message.
+  def broadcast_seen_by(reader)
+    Turbo::StreamsChannel.broadcast_replace_to self, target: "seen_receipt", partial: "chatrooms/seen_receipt",
+                                                     locals: { reader: reader, seen_at: seen_at_by(reader) }
   end
 end

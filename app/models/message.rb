@@ -25,5 +25,11 @@ class Message < ApplicationRecord
                          target: "unread_badge",
                          partial: "shared/unread_badge",
                          locals: { count: recipient.unread_messages_count }
+    Turbo::StreamsChannel.broadcast_append_to [recipient, :inbox],
+                                              target: "toasts",
+                                              partial: "shared/live_toast",
+                                              locals: { text: "#{user.first_name} : #{content.squish.truncate(70)}",
+                                                        url: Rails.application.routes.url_helpers.chatroom_path(chatroom),
+                                                        icon: "comment-dots" }
   end
 end

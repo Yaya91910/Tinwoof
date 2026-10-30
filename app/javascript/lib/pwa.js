@@ -35,6 +35,15 @@ export function captureInstallPrompt() {
   })
 }
 
+// Stops the loading shimmer behind photos once they are displayed.
+export function markLoadedImages() {
+  const mark = (image) => image.classList.add("is-loaded")
+  document.addEventListener("load", (event) => { if (event.target.tagName === "IMG") mark(event.target) }, true)
+  document.addEventListener("turbo:load", () => {
+    document.querySelectorAll("img").forEach((image) => { if (image.complete && image.naturalWidth) mark(image) })
+  })
+}
+
 export function isStandalone() {
   return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true
 }

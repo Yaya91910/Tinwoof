@@ -15,6 +15,57 @@
 </section>
 
 <div class="container">
+  <% completion = @user.profile_completion %>
+  <% if completion < 100 %>
+    <% steps = @user.profile_steps %>
+    <section class="completion" aria-label="Complétion du profil">
+      <div class="completion__head">
+        <div class="completion__ring" style="--progress: <%= completion %>"><span><%= completion %>%</span></div>
+        <div>
+          <h2 class="completion__title">Profil complété à <%= completion %> %</h2>
+          <p class="completion__text">Les profils complets reçoivent bien plus de coups de cœur.</p>
+        </div>
+      </div>
+      <ul class="completion__steps">
+        <% [
+             [:photo, "Ajouter une photo de vous", edit_user_registration_path],
+             [:bio, "Écrire votre bio", profile_path(anchor: "preferences")],
+             [:dog, "Inscrire votre chien", new_dog_path],
+             [:dog_photo, "Ajouter une photo de votre chien", (@dogs.first ? edit_dog_path(@dogs.first) : new_dog_path)],
+             [:location, "Activer la localisation", profile_path(anchor: "preferences")]
+           ].each do |key, label, path| %>
+          <li class="completion__step <%= "is-done" if steps[key] %>">
+            <% if steps[key] %>
+              <%= icon "circle-check" %> <span><%= label %></span>
+            <% else %>
+              <%= link_to path do %><%= icon "circle-plus" %> <span><%= label %></span><%= icon "chevron-right", class: "completion__go" %><% end %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </section>
+  <% end %>
+
+  <% if @admirer_likes.any? %>
+    <section class="section">
+      <div class="section__head">
+        <h2 class="section__title">Ils ont craqué pour vous <span class="count count--hot"><%= @admirer_likes.size %></span></h2>
+      </div>
+      <p class="section__hint">Un coup de cœur en retour et c'est un match instantané.</p>
+      <div class="admirers">
+        <% @admirer_likes.each do |like| %>
+          <% admirer = @admirers[like.user_id] %>
+          <% next unless admirer %>
+          <%= link_to user_path(admirer), class: "admirer #{"admirer--super" if like.superlike?}" do %>
+            <span class="admirer__avatar"><%= avatar_tag admirer, size: 64 %><span class="admirer__badge"><%= icon(like.superlike? ? "star" : "heart") %></span></span>
+            <span class="admirer__name"><%= admirer.first_name %></span>
+            <span class="admirer__dog">pour <%= like.dog.name %></span>
+          <% end %>
+        <% end %>
+      </div>
+    </section>
+  <% end %>
+
   <section class="section">
     <div class="section__head">
       <h2 class="section__title">Mes chiens</h2>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_10_30_100300) do
+ActiveRecord::Schema[7.2].define(version: 2026_10_30_170000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -98,8 +98,10 @@ ActiveRecord::Schema[7.2].define(version: 2026_10_30_100300) do
     t.boolean "liked", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "superlike", default: false, null: false
     t.index ["dog_id"], name: "index_swipes_on_dog_id"
     t.index ["user_id", "dog_id"], name: "index_swipes_on_user_id_and_dog_id", unique: true
+    t.index ["user_id", "superlike", "updated_at"], name: "index_swipes_on_user_id_and_superlike_and_updated_at"
     t.index ["user_id"], name: "index_swipes_on_user_id"
   end
 

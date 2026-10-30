@@ -38,3 +38,89 @@
 }
 
 .page-profile .appbar { display: none; }
+
+// Profile completion nudge.
+.completion {
+  margin-top: 22px;
+  padding: 16px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-1);
+}
+.completion__head { display: flex; align-items: center; gap: 14px; }
+.completion__ring {
+  --progress: 0;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: conic-gradient(var(--brand) calc(var(--progress) * 1%), var(--surface-2) 0);
+
+  span {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--surface);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 0.85rem;
+  }
+}
+.completion__title { font-size: 1.05rem; }
+.completion__text { color: var(--ink-2); font-size: 0.85rem; }
+.completion__steps { display: grid; gap: 2px; margin-top: 12px; }
+.completion__step {
+  > a, > i, > span { vertical-align: middle; }
+  a, &.is-done {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 4px;
+    font-size: 0.92rem;
+  }
+  a { color: var(--ink); font-weight: 600; i:first-child { color: var(--brand); } }
+  &.is-done { color: var(--ink-3); text-decoration: line-through; i { color: var(--success); } }
+}
+.completion__go { margin-left: auto; color: var(--ink-3); }
+
+// Owners who liked one of your dogs.
+.admirers {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 96px;
+  gap: 12px;
+  margin: 0 calc(var(--gutter) * -1);
+  padding: 4px var(--gutter) 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.admirer { display: grid; justify-items: center; gap: 2px; text-align: center; }
+.admirer__avatar {
+  position: relative;
+  padding: 3px;
+  border-radius: 50%;
+  background: var(--brand-gradient);
+  .avatar { border: 3px solid var(--bg); }
+}
+.admirer--super .admirer__avatar { background: linear-gradient(135deg, #2f80ff, #6a5cff); }
+.admirer__badge {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: 3px solid var(--bg);
+  border-radius: 50%;
+  background: var(--brand);
+  color: #fff;
+  font-size: 0.7rem;
+}
+.admirer--super .admirer__badge { background: #2f80ff; }
+.admirer__name { margin-top: 4px; font-weight: 700; font-size: 0.9rem; }
+.admirer__dog { color: var(--ink-3); font-size: 0.75rem; }

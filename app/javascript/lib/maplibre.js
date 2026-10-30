@@ -22,6 +22,19 @@ export function loadMapLibre() {
   return loading
 }
 
+export const FRENCH_LOCALE = {
+  "AttributionControl.ToggleAttribution": "Afficher les crédits",
+  "GeolocateControl.FindMyLocation": "Me localiser",
+  "GeolocateControl.LocationNotAvailable": "Position indisponible",
+  "NavigationControl.ResetBearing": "Réorienter vers le nord",
+  "NavigationControl.ZoomIn": "Zoomer",
+  "NavigationControl.ZoomOut": "Dézoomer",
+  "Popup.Close": "Fermer",
+  "CooperativeGesturesHandler.WindowsHelpText": "Ctrl + molette pour zoomer la carte",
+  "CooperativeGesturesHandler.MacHelpText": "⌘ + molette pour zoomer la carte",
+  "CooperativeGesturesHandler.MobileHelpText": "Utilisez deux doigts pour déplacer la carte"
+}
+
 // Free, keyless OpenStreetMap vector tiles (openfreemap.org), matching the colour scheme.
 export function mapStyle() {
   const dark = window.matchMedia("(prefers-color-scheme: dark)").matches
