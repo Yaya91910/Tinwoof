@@ -11,7 +11,7 @@ class Dog < ApplicationRecord
 
   geocoded_by :address
 
-  before_validation :normalize_traits
+  normalizes :traits, with: ->(traits) { Array(traits).compact_blank.map(&:to_s).uniq }, apply_to_nil: true
   after_validation :geocode, if: :needs_geocoding?
 
   validates :name, :breed, presence: true
@@ -57,10 +57,6 @@ class Dog < ApplicationRecord
   def coordinates_provided?
     latitude.present? && longitude.present? &&
       (will_save_change_to_latitude? || will_save_change_to_longitude?)
-  end
-
-  def normalize_traits
-    self.traits = Array(traits).compact_blank.map(&:to_s).uniq
   end
 
   def traits_are_known

@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   get "offline", to: "pages#offline"
   get "manifest.webmanifest", to: "pwa#manifest", as: :pwa_manifest
   get "service-worker.js", to: "pwa#service_worker", as: :pwa_service_worker
-  get "up", to: proc { [200, { "Content-Type" => "text/plain" }, ["OK"]] }
+  get "up", to: "rails/health#show", as: :rails_health_check
 
   resource :discover, only: :show, controller: "discover"
   resource :map, only: :show
