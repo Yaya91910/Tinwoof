@@ -1,0 +1,97 @@
+<%= simple_form_for dog, html: { class: "form", data: { controller: "photo-preview" } } do |f| %>
+  <%= f.error_notification %>
+
+  <fieldset class="form__group">
+    <legend class="form__legend">Photos</legend>
+    <div class="photo-picker">
+      <% dog.photos.each do |photo| %>
+        <% next unless photo.persisted? %>
+        <label class="photo-picker__item">
+          <img src="<%= photo_url(photo, width: 240, height: 300) %>" alt="">
+          <input type="checkbox" name="dog[remove_photo_ids][]" value="<%= photo.id %>" class="photo-picker__remove">
+          <span class="photo-picker__remove-label"><%= icon "trash-can" %> Retirer</span>
+        </label>
+      <% end %>
+      <span class="photo-picker__previews" data-photo-preview-target="previews"></span>
+      <label class="photo-picker__add">
+        <%= icon "camera" %>
+        <span>Ajouter</span>
+        <%= f.file_field :photos, multiple: true, accept: "image/*", class: "visually-hidden",
+                                  data: { action: "photo-preview#preview", photo_preview_target: "input" } %>
+      </label>
+    </div>
+    <p class="field__hint">Jusqu'à <%= Dog::MAX_PHOTOS %> photos. La première sert de couverture.</p>
+    <% if dog.errors[:photos].any? %>
+      <p class="field__error"><%= dog.errors.full_messages_for(:photos).to_sentence %></p>
+    <% end %>
+  </fieldset>
+
+  <fieldset class="form__group">
+    <legend class="form__legend">L'essentiel</legend>
+    <%= f.input :name, required: true, input_html: { autocomplete: "off" } %>
+    <div class="field">
+      <span class="field__label">Sexe *</span>
+      <div class="segmented segmented--block" role="radiogroup" aria-label="Sexe">
+        <% Dog::GENDERS.each do |gender| %>
+          <label class="segmented__option">
+            <%= f.radio_button :gender, gender, required: true %>
+            <span><%= icon(gender == "female" ? "venus" : "mars") %> <%= t("dogs.genders.#{gender}") %></span>
+          </label>
+        <% end %>
+      </div>
+      <% if dog.errors[:gender].any? %>
+        <p class="field__error"><%= dog.errors.full_messages_for(:gender).to_sentence %></p>
+      <% end %>
+    </div>
+    <%= f.input :breed, required: true %>
+    <div class="form__row">
+      <%= f.input :age, input_html: { min: 0, max: 30, inputmode: "numeric" } %>
+      <%= f.input :height_cm, input_html: { min: 5, max: 120, inputmode: "numeric" } %>
+    </div>
+  </fieldset>
+
+  <fieldset class="form__group">
+    <legend class="form__legend">Son caractère <small>(<%= Dog::MAX_TRAITS %> max)</small></legend>
+    <div class="trait-picker">
+      <% Dog::TRAITS.each do |trait| %>
+        <label class="trait-picker__option">
+          <input type="checkbox" name="dog[traits][]" value="<%= trait %>" <%= "checked" if dog.traits.include?(trait) %>>
+          <span><%= trait_label(trait) %></span>
+        </label>
+      <% end %>
+      <input type="hidden" name="dog[traits][]" value="">
+    </div>
+    <% if dog.errors[:traits].any? %>
+      <p class="field__error"><%= dog.errors.full_messages_for(:traits).to_sentence %></p>
+    <% end %>
+    <%= f.input :description, as: :text, input_html: { rows: 4, maxlength: 600 } %>
+  </fieldset>
+
+  <fieldset class="form__group" data-controller="address-autocomplete"
+            <% if current_user.located? %>data-address-autocomplete-proximity-value="<%= current_user.coordinates.reverse.to_json %>"<% end %>>
+    <legend class="form__legend">Spot de balade</legend>
+    <div class="field field--autocomplete">
+      <%= f.label :address, class: "field__label" %>
+      <div class="autocomplete">
+        <%= f.text_field :address, class: "field__input", autocomplete: "off",
+                         placeholder: t("simple_form.placeholders.dog.address"),
+                         role: "combobox", "aria-autocomplete": "list", "aria-expanded": "false",
+                         "aria-controls": "address-suggestions",
+                         data: { address_autocomplete_target: "input",
+                                 action: "input->address-autocomplete#search keydown->address-autocomplete#navigate blur->address-autocomplete#close" } %>
+        <button type="button" class="autocomplete__locate" data-action="address-autocomplete#locate"
+                data-address-autocomplete-target="locate" aria-label="Utiliser ma position actuelle">
+          <%= icon "location-crosshairs" %>
+        </button>
+        <ul class="autocomplete__list" id="address-suggestions" role="listbox" data-address-autocomplete-target="list" hidden></ul>
+      </div>
+      <%= f.hidden_field :latitude, data: { address_autocomplete_target: "latitude" } %>
+      <%= f.hidden_field :longitude, data: { address_autocomplete_target: "longitude" } %>
+      <p class="field__hint"><%= t("simple_form.hints.dog.address") %></p>
+    </div>
+  </fieldset>
+
+  <div class="form__actions">
+    <%= f.button :submit, dog.new_record? ? "Publier le profil" : "Enregistrer", data: { turbo_submits_with: "Envoi…" } %>
+  </div>
+<% end %>

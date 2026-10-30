@@ -1,0 +1,156 @@
+.page-landing .app { background: var(--bg); }
+
+.landing {
+  position: relative;
+  overflow: hidden;
+  padding: calc(var(--safe-top) + 14px) var(--gutter) 40px;
+  background: var(--brand-gradient);
+  color: #fff;
+  border-radius: 0 0 36px 36px;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -40% -30% auto auto;
+    width: 420px;
+    height: 420px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.28), transparent 65%);
+  }
+}
+
+.landing__nav { position: relative; display: flex; justify-content: space-between; align-items: center; }
+
+.landing__hero { position: relative; margin-top: 36px; }
+.landing__kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.18);
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+.landing__title {
+  margin-top: 18px;
+  font-size: clamp(2.8rem, 13vw, 4.2rem);
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+
+  span { color: #fff3c4; }
+}
+.landing__lead { margin-top: 18px; max-width: 34ch; font-size: 1.08rem; opacity: 0.95; }
+.landing__cta { display: grid; gap: 10px; margin-top: 26px; }
+
+.phone {
+  position: relative;
+  width: 250px;
+  margin: 40px auto 0;
+  padding: 10px;
+  border-radius: 42px;
+  background: #1b1412;
+  box-shadow: 0 40px 80px rgba(60, 10, 30, 0.45), inset 0 0 0 2px rgba(255, 255, 255, 0.12);
+  transform: rotate(-4deg);
+  animation: float 6s ease-in-out infinite;
+}
+.phone__screen {
+  position: relative;
+  height: 420px;
+  padding: 16px 12px;
+  border-radius: 34px;
+  background: #fff7f0;
+  overflow: hidden;
+}
+.demo-card {
+  position: absolute;
+  inset: 16px 12px 86px;
+  overflow: hidden;
+  border-radius: 22px;
+  background: #ff7b7b;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  transform: rotate(6deg) translateX(16px);
+  animation: demo-swipe 6s ease-in-out infinite;
+
+  &::after { content: ""; position: absolute; inset: 50% 0 0; background: linear-gradient(transparent, rgba(0, 0, 0, 0.6)); }
+}
+.demo-card--back { transform: scale(0.94) translateY(10px); animation: none; background: #ffd0c2; }
+.demo-card__photo { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.demo-card__stamp { top: 22px; left: 14px; font-size: 1.2rem; opacity: 1; border-width: 3px; }
+.demo-card__info {
+  position: absolute;
+  z-index: 1;
+  left: 14px;
+  bottom: 12px;
+  display: grid;
+  color: #fff;
+  strong { font-family: var(--font-display); font-size: 1.4rem; span { font-weight: 400; } }
+  small { opacity: 0.9; }
+}
+.demo-actions {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 18px;
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  .swipe-btn { width: 50px; height: 50px; font-size: 1.2rem; }
+  .swipe-btn--like { width: 56px; height: 56px; }
+}
+
+@keyframes float { 50% { transform: rotate(-4deg) translateY(-10px); } }
+@keyframes demo-swipe {
+  0%, 15% { transform: rotate(0) translateX(0); }
+  35%, 55% { transform: rotate(6deg) translateX(16px); }
+  75%, 100% { transform: rotate(0) translateX(0); }
+}
+
+.features {
+  display: grid;
+  gap: 12px;
+  padding: 32px var(--gutter) 8px;
+}
+.feature {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 14px;
+  padding: 18px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-1);
+}
+.feature__icon {
+  grid-row: span 2;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: var(--brand-gradient);
+  color: #fff;
+  font-size: 1.15rem;
+}
+.feature__title { font-size: 1.08rem; }
+.feature__text { color: var(--ink-2); font-size: 0.92rem; }
+
+.install-band {
+  display: grid;
+  gap: 14px;
+  margin: 20px var(--gutter);
+  padding: 20px;
+  border-radius: var(--radius-l);
+  background: var(--surface-2);
+}
+.install-band__title { font-size: 1.2rem; }
+.install-band__text { color: var(--ink-2); font-size: 0.92rem; }
+
+.landing-footer {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding: 28px var(--gutter) calc(28px + var(--safe-bottom));
+  color: var(--ink-3);
+  font-size: 0.85rem;
+}

@@ -1,0 +1,70 @@
+<% content_for :title, "Découvrir" %>
+<% content_for :body_class, "page-discover" %>
+
+<header class="appbar appbar--brand">
+  <div class="brandmark"><%= icon "paw" %> tinwoof</div>
+  <div class="appbar__actions">
+    <%= link_to dogs_path, class: "chip chip--soft", "aria-label": "Voir la liste des chiens autour" do %>
+      <%= icon "location-dot" %>
+      <span><%= current_user.located? ? "#{current_user.search_radius_km} km" : "Partout" %></span>
+    <% end %>
+  </div>
+</header>
+
+<%= render "shared/location_prompt" %>
+
+<section class="deck" data-controller="swipe" data-swipe-url-value="<%= swipes_path %>">
+  <div class="deck__stack" data-swipe-target="stack">
+    <% @dogs.each do |dog| %>
+      <%= render "dogs/swipe_card", dog: dog %>
+    <% end %>
+  </div>
+
+  <div class="deck__empty empty" data-swipe-target="empty" <%= "hidden" if @dogs.any? %>>
+    <div class="empty__art">🐾</div>
+    <h2 class="empty__title">Vous avez fait le tour !</h2>
+    <p class="empty__text">
+      <% if current_user.located? %>
+        Plus aucun chien dans un rayon de <%= current_user.search_radius_km %> km. Élargissez la zone ou revenez plus tard.
+      <% else %>
+        Activez la localisation pour découvrir les chiens près de chez vous.
+      <% end %>
+    </p>
+    <div class="empty__actions">
+      <%= link_to "Élargir le rayon", profile_path(anchor: "preferences"), class: "btn btn--primary" %>
+      <%= link_to "Voir la carte", map_path, class: "btn btn--ghost" %>
+    </div>
+  </div>
+
+  <div class="deck__actions" data-swipe-target="actions" <%= "hidden" if @dogs.empty? %>>
+    <button type="button" class="swipe-btn swipe-btn--pass" data-action="swipe#pass" aria-label="Passer">
+      <%= icon "xmark" %>
+    </button>
+    <button type="button" class="swipe-btn swipe-btn--info" data-action="swipe#open" aria-label="Voir le profil">
+      <%= icon "circle-info" %>
+    </button>
+    <button type="button" class="swipe-btn swipe-btn--like" data-action="swipe#like" aria-label="J'adore">
+      <%= icon "heart" %>
+    </button>
+  </div>
+
+  <dialog class="match" data-swipe-target="match" aria-labelledby="match-title">
+    <div class="match__confetti" aria-hidden="true">
+      <% 18.times do |i| %><i style="--i: <%= i %>; --c: hsl(<%= i * 40 %> 95% 75%)"></i><% end %>
+    </div>
+    <p class="match__kicker">Woof woof !</p>
+    <h2 class="match__title" id="match-title">C'est un match</h2>
+    <div class="match__pair">
+      <%= avatar_tag current_user, size: 96, class: "match__avatar" %>
+      <span class="match__heart"><%= icon "heart" %></span>
+      <span class="match__avatar match__dog">
+        <img data-swipe-target="matchPhoto" alt="">
+      </span>
+    </div>
+    <p class="match__text">Vous et <strong data-swipe-target="matchOwner"></strong> vous plaisez mutuellement. Proposez une balade à <strong data-swipe-target="matchName"></strong> !</p>
+    <a class="btn btn--primary btn--block" data-swipe-target="matchLink" href="<%= chatrooms_path %>">
+      <%= icon "paper-plane" %> Envoyer un message
+    </a>
+    <button type="button" class="btn btn--ghost btn--block" data-action="swipe#closeMatch">Continuer à swiper</button>
+  </dialog>
+</section>

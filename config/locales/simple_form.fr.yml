@@ -1,0 +1,25 @@
+fr:
+  simple_form:
+    "yes": "Oui"
+    "no": "Non"
+    required:
+      text: "obligatoire"
+      mark: "*"
+    error_notification:
+      default_message: "Oups, quelques champs sont à corriger :"
+    placeholders:
+      dog:
+        name: "Ex. Moka"
+        breed: "Ex. Berger australien"
+        age: "En années"
+        height_cm: "Au garrot, en cm"
+        description: "Son caractère, ses manies, ce qu'il adore…"
+        address: "Parc, quartier, ville…"
+      user:
+        first_name: "Camille"
+        last_name: "Martin"
+        email: "camille@exemple.fr"
+        bio: "Quelques mots sur vous et vos balades préférées"
+    hints:
+      dog:
+        address: "Son lieu de balade préféré : c'est ce point qui apparaît sur la carte."

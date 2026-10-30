@@ -1,0 +1,28 @@
+<% content_for :title, "Carte" %>
+<% content_for :body_class, "page-map" %>
+
+<section class="mapview" data-controller="map"
+         data-map-mode-value="explore"
+         data-map-url-value="<%= map_path(format: :json) %>"
+         <% if current_user.located? %>data-map-center-value="<%= [current_user.longitude, current_user.latitude].to_json %>"<% end %>>
+  <div class="mapview__canvas" data-map-target="canvas"></div>
+
+  <div class="mapview__top">
+    <div class="mapview__pill">
+      <%= icon "paw" %>
+      <span data-map-target="count">Chargement…</span>
+    </div>
+  </div>
+
+  <div class="map-sheet" data-map-target="sheet" hidden>
+    <a class="map-sheet__card" data-map-target="sheetLink" href="#">
+      <img class="map-sheet__photo" data-map-target="sheetPhoto" alt="">
+      <span class="map-sheet__body">
+        <span class="map-sheet__name" data-map-target="sheetName"></span>
+        <span class="map-sheet__meta" data-map-target="sheetMeta"></span>
+      </span>
+      <%= icon "chevron-right", class: "map-sheet__chevron" %>
+    </a>
+    <button type="button" class="map-sheet__close icon-btn" data-action="map#closeSheet" aria-label="Fermer"><%= icon "xmark" %></button>
+  </div>
+</section>

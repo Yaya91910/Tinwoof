@@ -1,25 +1,34 @@
 Rails.application.routes.draw do
-  mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
+  authenticate :user, ->(user) { user.admin? } do
+    mount RailsAdmin::Engine => "/admin", as: "rails_admin"
+  end
+
   devise_for :users
 
   authenticated :user do
-    root "dogs#index", as: :authenticated_user
+    root "discover#show", as: :authenticated_root
   end
+  root "pages#home"
 
-  devise_scope :user do
-    root 'devise/sessions#new'
-  end
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-  # Defines the root path route ("/")
-  # root "articles#index"
+  get "offline", to: "pages#offline"
+  get "manifest.webmanifest", to: "pwa#manifest", as: :pwa_manifest
+  get "service-worker.js", to: "pwa#service_worker", as: :pwa_service_worker
+  get "up", to: proc { [200, { "Content-Type" => "text/plain" }, ["OK"]] }
+
+  resource :discover, only: :show, controller: "discover"
+  resource :map, only: :show
+  resource :location, only: %i[update destroy]
+  resource :profile, only: %i[show update]
+  resources :swipes, only: :create
 
   resources :dogs do
-    resources :comments, only: [:new, :create]
+    resources :comments, only: :create
   end
 
-  resources :chatrooms, only: %i[ index show ] do
-    resources :messages, only: %i[ create ]
-  end
+  resources :users, only: :show
 
-  resources :users, only: [:index, :show]
+  resources :chatrooms, only: %i[index show create] do
+    patch :read, on: :member
+    resources :messages, only: :create
+  end
 end

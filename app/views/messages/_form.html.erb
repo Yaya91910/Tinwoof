@@ -1,0 +1,10 @@
+<%= form_with model: [chatroom, message], id: "message_form", class: "composer",
+              data: { chat_target: "form", action: "turbo:submit-end->chat#reset" } do |f| %>
+  <%= f.text_area :content, rows: 1, class: "composer__input", placeholder: "Votre message…", required: true,
+                            maxlength: 2000, autocomplete: "off", enterkeyhint: "send", "aria-label": "Votre message",
+                            data: { chat_target: "input", action: "keydown->chat#submitOnEnter input->chat#resize" } %>
+  <button type="submit" class="composer__send" aria-label="Envoyer"><%= icon "paper-plane" %></button>
+  <% if message.errors.any? %>
+    <p class="field__error composer__error"><%= message.errors.full_messages.to_sentence %></p>
+  <% end %>
+<% end %>

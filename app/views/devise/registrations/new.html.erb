@@ -1,30 +1,22 @@
-<h2>Sign up</h2>
-
-<%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), data: { turbo: :false }) do |f| %>
-  <%= f.error_notification %>
-
-  <div class="form-inputs">
-    <%= f.input :first_name,
-                required: true %>
-    <%= f.input :last_name,
-                required: true %>
-    <%= f.input :email,
-                required: true,
-                autofocus: true,
-                input_html: { autocomplete: "email" }%>
-    <%= f.input :password,
-                required: true,
-                hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length),
-                input_html: { autocomplete: "new-password" } %>
-    <%= f.input :password_confirmation,
-                required: true,
-                input_html: { autocomplete: "new-password" } %>
-    <%= f.input :photo, as: :file %>
+<% content_for :title, "Inscription" %>
+<% content_for :body_class, "page-auth" %>
+<section class="auth">
+  <%= render "devise/shared/auth_header", title: "Rejoignez la meute", subtitle: "Créez votre compte, puis présentez votre chien." %>
+  <div class="auth__card">
+    <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "form" }, data: { turbo: false }) do |f| %>
+      <%= render "devise/shared/error_messages", resource: resource %>
+      <div class="form__row">
+        <%= f.input :first_name, required: true, autofocus: true, input_html: { autocomplete: "given-name" } %>
+        <%= f.input :last_name, required: true, input_html: { autocomplete: "family-name" } %>
+      </div>
+      <%= f.input :email, required: true, input_html: { autocomplete: "email", inputmode: "email" } %>
+      <%= f.input :password, required: true,
+                  hint: ("#{@minimum_password_length} caractères minimum" if @minimum_password_length),
+                  input_html: { autocomplete: "new-password", minlength: @minimum_password_length } %>
+      <%= f.input :password_confirmation, required: true, input_html: { autocomplete: "new-password" } %>
+      <%= f.input :photo, as: :file, input_html: { accept: "image/*" } %>
+      <%= f.button :submit, "Créer mon compte" %>
+    <% end %>
+    <%= render "devise/shared/links" %>
   </div>
-
-  <div class="form-actions">
-    <%= f.button :submit, "Sign up" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</section>

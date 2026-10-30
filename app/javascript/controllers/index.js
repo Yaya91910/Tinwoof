@@ -4,14 +4,41 @@
 
 import { application } from "./application"
 
-import ChatroomSubscriptionController from "./chatroom_subscription_controller"
-application.register("chatroom-subscription", ChatroomSubscriptionController)
+import AddressAutocompleteController from "./address_autocomplete_controller"
+application.register("address-autocomplete", AddressAutocompleteController)
 
-import HelloController from "./hello_controller"
-application.register("hello", HelloController)
+import AppBadgeController from "./app_badge_controller"
+application.register("app-badge", AppBadgeController)
 
-import InsertInListController from "./insert_in_list_controller"
-application.register("insert-in-list", InsertInListController)
+import AutoSubmitController from "./auto_submit_controller"
+application.register("auto-submit", AutoSubmitController)
+
+import CarouselController from "./carousel_controller"
+application.register("carousel", CarouselController)
+
+import ChatController from "./chat_controller"
+application.register("chat", ChatController)
+
+import GeolocationController from "./geolocation_controller"
+application.register("geolocation", GeolocationController)
+
+import InstallController from "./install_controller"
+application.register("install", InstallController)
 
 import MapController from "./map_controller"
 application.register("map", MapController)
+
+import MessageController from "./message_controller"
+application.register("message", MessageController)
+
+import PhotoPreviewController from "./photo_preview_controller"
+application.register("photo-preview", PhotoPreviewController)
+
+import ShareController from "./share_controller"
+application.register("share", ShareController)
+
+import SwipeController from "./swipe_controller"
+application.register("swipe", SwipeController)
+
+import ToastController from "./toast_controller"
+application.register("toast", ToastController)

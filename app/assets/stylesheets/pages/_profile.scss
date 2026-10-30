@@ -1,0 +1,40 @@
+.hero-profile {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: calc(var(--safe-top) + 28px) var(--gutter) 8px;
+  text-align: center;
+
+  .button_to, form { margin-top: 8px; }
+}
+.hero-profile__avatar { box-shadow: 0 0 0 4px var(--bg), 0 0 0 7px var(--brand), var(--shadow-2); }
+.hero-profile__name { margin-top: 10px; font-size: 1.8rem; font-weight: 800; }
+.hero-profile__bio { max-width: 34ch; color: var(--ink-2); }
+
+.presence--lg.presence--online::after { width: 22px; height: 22px; border-width: 4px; right: 6px; bottom: 6px; }
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 100%;
+  margin: 18px 0 0;
+  padding: 14px 8px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-1);
+}
+.stat {
+  display: grid;
+  & + & { border-left: 1px solid var(--line); }
+  dt { order: 2; color: var(--ink-3); font-size: 0.78rem; font-weight: 600; }
+  dd { order: 1; margin: 0; font-family: var(--font-display); font-weight: 800; font-size: 1.5rem; }
+}
+
+.avatar-edit {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  .field { flex: 1; margin: 0; }
+}
+
+.page-profile .appbar { display: none; }

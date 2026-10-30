@@ -1,18 +1,25 @@
-// Graphical variables
-@import "config/fonts";
-@import "config/colors";
-@import "config/bootstrap_variables";
-
-// External libraries
-@import "bootstrap/scss/bootstrap";
+// Tinwoof design system — mobile-first, light & dark.
 @import "font-awesome";
 
-// Your CSS partials
-@import "components/index";
-@import "pages/index";
+@import "base/tokens";
+@import "base/reset";
+@import "base/layout";
 
+@import "components/buttons";
+@import "components/forms";
+@import "components/avatar";
+@import "components/chips";
+@import "components/feedback";
+@import "components/tabbar";
+@import "components/swipe";
+@import "components/match";
+@import "components/dog_card";
+@import "components/map";
+@import "components/chat";
+@import "components/comments";
+@import "components/settings";
 
-
-.photo-default {
-  background-image: url('dog.png');
-}
+@import "pages/landing";
+@import "pages/auth";
+@import "pages/dog";
+@import "pages/profile";

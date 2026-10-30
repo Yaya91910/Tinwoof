@@ -1,0 +1,38 @@
+<% distance = dog_distance_km(dog) %>
+<article class="swipe-card"
+         data-swipe-target="card"
+         data-dog-id="<%= dog.id %>"
+         data-dog-name="<%= dog.name %>"
+         data-owner-name="<%= dog.user.first_name %>"
+         data-photo="<%= dog_photo_url(dog, width: 300, height: 300) %>"
+         data-url="<%= dog_path(dog) %>">
+  <% if (photo = dog_photo_url(dog)) %>
+    <img class="swipe-card__photo" src="<%= photo %>" alt="<%= dog.name %>" draggable="false" decoding="async">
+  <% else %>
+    <div class="swipe-card__photo swipe-card__photo--placeholder"><%= icon "dog" %></div>
+  <% end %>
+
+  <span class="stamp stamp--like" aria-hidden="true">Woof ♥</span>
+  <span class="stamp stamp--nope" aria-hidden="true">Bof</span>
+
+  <div class="swipe-card__info">
+    <div class="swipe-card__headline">
+      <h2 class="swipe-card__name"><%= dog.name %></h2>
+      <% if dog.age %><span class="swipe-card__age"><%= dog.age %></span><% end %>
+      <%= gender_icon dog %>
+    </div>
+    <p class="swipe-card__meta">
+      <%= dog.breed %>
+      <% if distance %>
+        <span class="dot-sep"></span><%= icon "location-dot" %> <%= distance_label(distance) %>
+      <% end %>
+    </p>
+    <% if dog.traits.any? %>
+      <ul class="tags tags--glass">
+        <% dog.traits.first(3).each do |trait| %>
+          <li class="tag"><%= trait_label(trait) %></li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+</article>

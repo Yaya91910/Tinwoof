@@ -1,0 +1,15 @@
+<% distance = dog_distance_km(dog) %>
+<%= link_to dog_path(dog), class: "dog-card" do %>
+  <% if (photo = dog_photo_url(dog, width: 400)) %>
+    <img class="dog-card__photo" src="<%= photo %>" alt="" loading="lazy" decoding="async">
+  <% else %>
+    <span class="dog-card__photo dog-card__photo--placeholder"><%= icon "dog" %></span>
+  <% end %>
+  <% if distance %>
+    <span class="dog-card__distance"><%= icon "location-dot" %> <%= distance_label(distance).delete_prefix("à ") %></span>
+  <% end %>
+  <span class="dog-card__body">
+    <span class="dog-card__name"><%= dog.name %><% if dog.age %><span class="dog-card__age">, <%= dog.age %></span><% end %></span>
+    <span class="dog-card__breed"><%= dog.breed %></span>
+  </span>
+<% end %>
