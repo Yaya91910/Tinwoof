@@ -1,8 +1,13 @@
 import { Controller } from "@hotwired/stimulus"
+import { vibrate } from "../lib/haptics"
 
 export default class extends Controller {
+  static values = { live: Boolean }
+
   connect() {
-    this.timer = setTimeout(() => this.dismiss(), 4500)
+    // Live notifications (new match, new message) stay a little longer and buzz.
+    if (this.liveValue) vibrate([15, 40, 15])
+    this.timer = setTimeout(() => this.dismiss(), this.liveValue ? 6000 : 4500)
   }
 
   disconnect() {

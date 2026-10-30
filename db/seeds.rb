@@ -76,7 +76,9 @@ end
 puts
 
 puts "Liking Pixel so that the demo account's first likes become matches…"
-owners.first(6).each { |owner| Swipe.create!(user: owner, dog: pixel, liked: true) }
+owners.first(6).each_with_index do |owner, index|
+  Swipe.create!(user: owner, dog: pixel, liked: true, superlike: index < 2)
+end
 
 puts "Starting a conversation…"
 olympia = owners.find { |owner| owner.first_name == "Olympia" }

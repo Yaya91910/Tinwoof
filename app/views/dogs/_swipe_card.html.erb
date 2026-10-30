@@ -1,19 +1,39 @@
+<%# locals: (dog:, admirer_like: nil, position: 0) -%>
 <% distance = dog_distance_km(dog) %>
-<article class="swipe-card"
+<% photos = dog.photos.map { |photo| photo_url(photo, width: 600, height: 800) } %>
+<article class="swipe-card <%= "swipe-card--super" if admirer_like&.superlike? %>"
          data-swipe-target="card"
          data-dog-id="<%= dog.id %>"
          data-dog-name="<%= dog.name %>"
          data-owner-name="<%= dog.user.first_name %>"
          data-photo="<%= dog_photo_url(dog, width: 300, height: 300) %>"
+         data-photos="<%= photos.to_json %>"
          data-url="<%= dog_path(dog) %>">
-  <% if (photo = dog_photo_url(dog)) %>
-    <img class="swipe-card__photo" src="<%= photo %>" alt="<%= dog.name %>" draggable="false" decoding="async">
+  <% if photos.any? %>
+    <img class="swipe-card__photo" src="<%= photos.first %>" alt="<%= dog.name %>" draggable="false" decoding="async"
+         <%= position.zero? ? 'fetchpriority="high"'.html_safe : ('loading="lazy"'.html_safe if position > 2) %>>
   <% else %>
     <div class="swipe-card__photo swipe-card__photo--placeholder"><%= icon "dog" %></div>
   <% end %>
 
+  <% if photos.size > 1 %>
+    <div class="swipe-card__progress" aria-hidden="true">
+      <% photos.size.times do |index| %>
+        <span class="<%= "is-active" if index.zero? %>"></span>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if admirer_like %>
+    <p class="swipe-card__admirer <%= "swipe-card__admirer--super" if admirer_like.superlike? %>">
+      <%= icon(admirer_like.superlike? ? "star" : "heart") %>
+      <%= dog.user.first_name %> a <%= admirer_like.superlike? ? "super-liké" : "craqué pour" %> <%= admirer_like.dog.name %>
+    </p>
+  <% end %>
+
   <span class="stamp stamp--like" aria-hidden="true">Woof ♥</span>
   <span class="stamp stamp--nope" aria-hidden="true">Bof</span>
+  <span class="stamp stamp--super" aria-hidden="true">Super ⭐</span>
 
   <div class="swipe-card__info">
     <div class="swipe-card__headline">
@@ -34,5 +54,8 @@
         <% end %>
       </ul>
     <% end %>
+    <button type="button" class="swipe-card__more" data-action="swipe#open" aria-label="Voir le profil de <%= dog.name %>">
+      <%= icon "arrow-up" %>
+    </button>
   </div>
 </article>

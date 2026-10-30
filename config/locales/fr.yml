@@ -33,6 +33,14 @@ fr:
         content: "Votre mot doux"
       message:
         content: "Message"
+      swipe:
+        superlike: "Super Like"
+    errors:
+      models:
+        swipe:
+          attributes:
+            superlike:
+              exhausted: "épuisés pour aujourd'hui, revenez demain"
 
   dogs:
     genders:
@@ -59,6 +67,12 @@ fr:
   profiles:
     update:
       updated: "Préférences enregistrées."
+  swipes:
+    create:
+      liked: "Coup de cœur envoyé à %{name} 💗"
+      superliked: "Super Like envoyé à %{name} ⭐"
+      passed: "C'est noté."
+      matched: "C'est un match avec %{name} ! 🎉"
 
   distance:
     meters: "à %{value} m"

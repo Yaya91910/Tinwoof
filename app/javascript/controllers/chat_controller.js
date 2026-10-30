@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
-import { request } from "../lib/http"
+import { metaContent, request } from "../lib/http"
 
 export default class extends Controller {
   static targets = ["scroller", "messages", "form", "input"]
@@ -7,14 +7,18 @@ export default class extends Controller {
 
   connect() {
     this.#scrollToBottom("instant")
-    this.observer = new MutationObserver(() => this.#scrollToBottom("smooth"))
+    this.observer = new MutationObserver((mutations) => {
+      this.#scrollToBottom("smooth")
+      if (this.#receivedMessage(mutations)) this.#markReadSoon()
+    })
     this.observer.observe(this.messagesTarget, { childList: true })
   }
 
   disconnect() {
     this.observer?.disconnect()
+    clearTimeout(this.readTimer)
     // Messages received while the conversation was open have been seen.
-    request(this.readUrlValue, { method: "PATCH", keepalive: true }).catch(() => {})
+    this.#markRead({ keepalive: true })
   }
 
   submitOnEnter(event) {
@@ -36,6 +40,23 @@ export default class extends Controller {
     this.formTarget.reset()
     this.resize()
     this.inputTarget.focus()
+  }
+
+  #receivedMessage(mutations) {
+    const me = metaContent("current-user-id")
+    return mutations.some((mutation) =>
+      Array.from(mutation.addedNodes).some((node) => node.dataset?.authorId && node.dataset.authorId !== me))
+  }
+
+  // Reading live lets the sender see "Vu" right away.
+  #markReadSoon() {
+    if (document.visibilityState !== "visible") return
+    clearTimeout(this.readTimer)
+    this.readTimer = setTimeout(() => this.#markRead(), 800)
+  }
+
+  #markRead({ keepalive = false } = {}) {
+    request(this.readUrlValue, { method: "PATCH", keepalive }).catch(() => {})
   }
 
   #scrollToBottom(behavior) {

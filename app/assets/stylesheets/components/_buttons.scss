@@ -82,3 +82,9 @@
 
 // button_to wraps its button in a form: keep it out of the layout flow.
 form.button_to { display: contents; }
+
+.btn--super {
+  background: linear-gradient(135deg, #2f80ff, #6a5cff);
+  color: #fff;
+  box-shadow: 0 10px 28px rgba(47, 128, 255, 0.35);
+}

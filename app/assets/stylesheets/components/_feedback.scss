@@ -83,3 +83,20 @@
 .location-prompt__body { flex: 1; min-width: 0; }
 .location-prompt__title { font-weight: 700; font-size: 0.95rem; }
 .location-prompt__text { color: var(--ink-2); font-size: 0.8rem; line-height: 1.35; }
+
+// Live notifications (new match, new message) are tappable.
+.toast--live {
+  color: var(--bg);
+  text-decoration: none;
+  .toast__icon--live {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--brand-gradient);
+    color: #fff;
+  }
+  .toast__chevron { opacity: 0.6; }
+}

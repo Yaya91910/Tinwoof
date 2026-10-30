@@ -34,6 +34,9 @@ application.register("message", MessageController)
 import PhotoPreviewController from "./photo_preview_controller"
 application.register("photo-preview", PhotoPreviewController)
 
+import SeenReceiptController from "./seen_receipt_controller"
+application.register("seen-receipt", SeenReceiptController)
+
 import ShareController from "./share_controller"
 application.register("share", ShareController)
 

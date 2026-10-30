@@ -135,3 +135,11 @@
   display: grid;
   gap: 12px;
 }
+
+// Photos fade in over a soft shimmer instead of an empty block.
+.swipe-card__photo, .gallery__slide, .dog-card__photo, .rail__item img {
+  background: linear-gradient(110deg, var(--surface-2) 30%, color-mix(in srgb, var(--surface-2) 70%, #fff) 50%, var(--surface-2) 70%) 0 0 / 300% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+.is-loaded { animation: none; background: none; }
+@keyframes shimmer { to { background-position: -150% 0; } }

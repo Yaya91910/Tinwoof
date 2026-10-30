@@ -42,6 +42,22 @@ class UserTest < ActiveSupport::TestCase
     assert_equal 0, users(:bob).unread_messages_count
   end
 
+  test "admirers are the owners who liked one of our dogs, super likes first" do
+    Swipe.record!(user: users(:bob), dog: dogs(:milo), liked: true)
+    Swipe.record!(user: users(:carol), dog: dogs(:milo), liked: true, superlike: true)
+
+    admirers = users(:alice).admirer_likes
+    assert_equal [users(:carol).id, users(:bob).id], admirers.keys
+    assert admirers[users(:carol).id].superlike?
+  end
+
+  test "profile completion counts the filled steps" do
+    alice = users(:alice)
+    assert_equal 40, alice.profile_completion # dog + location, no photo, no bio, no dog photo
+    alice.update!(bio: "Balades au canal")
+    assert_equal 60, alice.profile_completion
+  end
+
   test "destroying a user removes their chatrooms and dogs" do
     assert_difference -> { Chatroom.count } => -1, -> { Dog.count } => -1 do
       users(:bob).destroy!

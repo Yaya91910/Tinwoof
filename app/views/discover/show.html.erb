@@ -4,6 +4,12 @@
 <header class="appbar appbar--brand">
   <div class="brandmark"><%= icon "paw" %> tinwoof</div>
   <div class="appbar__actions">
+    <% if @waiting_admirers.positive? %>
+      <span class="chip chip--hot" title="Ces maîtres ont déjà craqué pour vos chiens">
+        <%= icon "fire" %> <%= @waiting_admirers %>
+        <span class="visually-hidden"><%= @waiting_admirers > 1 ? "maîtres vous attendent" : "maître vous attend" %></span>
+      </span>
+    <% end %>
     <%= link_to dogs_path, class: "chip chip--soft", "aria-label": "Voir la liste des chiens autour" do %>
       <%= icon "location-dot" %>
       <span><%= current_user.located? ? "#{current_user.search_radius_km} km" : "Partout" %></span>
@@ -13,10 +19,13 @@
 
 <%= render "shared/location_prompt" %>
 
-<section class="deck" data-controller="swipe" data-swipe-url-value="<%= swipes_path %>">
+<section class="deck" data-controller="swipe"
+         data-swipe-url-value="<%= swipes_path %>"
+         data-swipe-undo-url-value="<%= undo_swipes_path %>"
+         data-swipe-superlikes-value="<%= @superlikes_left %>">
   <div class="deck__stack" data-swipe-target="stack">
-    <% @dogs.each do |dog| %>
-      <%= render "dogs/swipe_card", dog: dog %>
+    <% @dogs.each_with_index do |dog, position| %>
+      <%= render "dogs/swipe_card", dog: dog, admirer_like: @admirer_likes[dog.user_id], position: position %>
     <% end %>
   </div>
 
@@ -31,17 +40,27 @@
       <% end %>
     </p>
     <div class="empty__actions">
-      <%= link_to "Élargir le rayon", profile_path(anchor: "preferences"), class: "btn btn--primary" %>
+      <% next_radius = User::SEARCH_RADII_KM.find { |km| km > current_user.search_radius_km } %>
+      <% if current_user.located? && next_radius %>
+        <%= button_to "Passer à #{next_radius} km", profile_path, method: :patch, class: "btn btn--primary",
+                      params: { user: { search_radius_km: next_radius }, return_to: "discover" } %>
+      <% end %>
       <%= link_to "Voir la carte", map_path, class: "btn btn--ghost" %>
     </div>
   </div>
 
   <div class="deck__actions" data-swipe-target="actions" <%= "hidden" if @dogs.empty? %>>
+    <button type="button" class="swipe-btn swipe-btn--small swipe-btn--undo" data-action="swipe#undo"
+            data-swipe-target="undo" aria-label="Revenir au chien précédent" disabled>
+      <%= icon "arrow-rotate-left" %>
+    </button>
     <button type="button" class="swipe-btn swipe-btn--pass" data-action="swipe#pass" aria-label="Passer">
       <%= icon "xmark" %>
     </button>
-    <button type="button" class="swipe-btn swipe-btn--info" data-action="swipe#open" aria-label="Voir le profil">
-      <%= icon "circle-info" %>
+    <button type="button" class="swipe-btn swipe-btn--small swipe-btn--super" data-action="swipe#superlike"
+            data-swipe-target="superButton" aria-label="Super Like">
+      <%= icon "star" %>
+      <span class="swipe-btn__count" data-swipe-target="superCount"><%= @superlikes_left %></span>
     </button>
     <button type="button" class="swipe-btn swipe-btn--like" data-action="swipe#like" aria-label="J'adore">
       <%= icon "heart" %>

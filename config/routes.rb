@@ -19,7 +19,9 @@ Rails.application.routes.draw do
   resource :map, only: :show
   resource :location, only: %i[update destroy]
   resource :profile, only: %i[show update]
-  resources :swipes, only: :create
+  resources :swipes, only: :create do
+    delete :undo, on: :collection
+  end
 
   resources :dogs do
     resources :comments, only: :create

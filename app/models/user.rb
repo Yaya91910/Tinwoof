@@ -63,6 +63,33 @@ class User < ApplicationRecord
     update!(latitude: nil, longitude: nil, located_at: nil)
   end
 
+  def superlikes_left_today
+    [Swipe::SUPERLIKES_PER_DAY - swipes.superlikes.today.count, 0].max
+  end
+
+  # Latest like received from each owner who liked one of this user's dogs,
+  # keyed by that owner's id (super likes first).
+  def admirer_likes
+    Swipe.likes.joins(:dog).where(dogs: { user_id: id }).includes(:dog)
+         .order(superlike: :desc, updated_at: :desc)
+         .group_by(&:user_id).transform_values(&:first)
+  end
+
+  def profile_steps
+    {
+      photo: photo.attached?,
+      bio: bio.present?,
+      dog: dogs.exists?,
+      dog_photo: dogs.joins(:photos_attachments).exists?,
+      location: located?
+    }
+  end
+
+  def profile_completion
+    steps = profile_steps
+    (steps.values.count(true) * 100.0 / steps.size).round
+  end
+
   def unread_messages_count
     Message.unread.where(chatroom_id: chatrooms.select(:id)).where.not(user: self).count
   end

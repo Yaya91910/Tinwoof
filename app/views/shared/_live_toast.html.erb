@@ -1,0 +1,6 @@
+<%# locals: (text:, url:, icon:) -%>
+<%= link_to url, class: "toast toast--live", role: "status", data: { controller: "toast", toast_live_value: true } do %>
+  <span class="toast__icon toast__icon--live"><%= icon(icon) %></span>
+  <span class="toast__text"><%= text %></span>
+  <%= icon "chevron-right", class: "toast__chevron" %>
+<% end %>

@@ -41,6 +41,14 @@
   </div>
 </section>
 
+<% if @stats %>
+  <section class="proof" aria-label="Tinwoof en chiffres">
+    <div class="proof__item"><strong><%= number_with_delimiter(@stats[:dogs]) %></strong><span>chiens inscrits</span></div>
+    <div class="proof__item"><strong><%= number_with_delimiter(@stats[:matches]) %></strong><span>matchs</span></div>
+    <div class="proof__item"><strong><%= number_with_delimiter(@stats[:towns]) %></strong><span>spots de balade</span></div>
+  </section>
+<% end %>
+
 <section class="features">
   <article class="feature">
     <span class="feature__icon"><%= icon "fire" %></span>

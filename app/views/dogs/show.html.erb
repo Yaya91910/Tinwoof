@@ -9,7 +9,8 @@
     <% if @dog.photos.any? %>
       <% @dog.photos.each_with_index do |photo, index| %>
         <img class="gallery__slide" data-carousel-target="slide" src="<%= photo_url(photo, width: 900, height: 1100) %>"
-             alt="<%= "#{@dog.name}, photo #{index + 1}" %>" <%= 'loading="lazy"'.html_safe if index.positive? %> decoding="async">
+             alt="<%= "#{@dog.name}, photo #{index + 1}" %>" decoding="async"
+             <%= index.zero? ? 'fetchpriority="high"'.html_safe : 'loading="lazy"'.html_safe %>>
       <% end %>
     <% else %>
       <div class="gallery__slide gallery__slide--placeholder" data-carousel-target="slide"><%= icon "dog" %></div>
@@ -67,6 +68,27 @@
 
   <% if @dog.description.present? %>
     <p class="prose"><%= @dog.description %></p>
+  <% end %>
+
+  <% unless mine %>
+    <section class="crush" aria-label="Votre avis sur <%= @dog.name %>">
+      <% if @swipe&.liked? %>
+        <p class="crush__done">
+          <%= icon(@swipe.superlike? ? "star" : "heart") %>
+          Vous avez <%= @swipe.superlike? ? "super-liké" : "craqué pour" %> <%= @dog.name %>.
+          <%= owner.first_name %> sera prévenu·e si c'est réciproque.
+        </p>
+      <% else %>
+        <%= button_to swipes_path, params: { dog_id: @dog.id, liked: true }, class: "btn btn--primary crush__like" do %>
+          <%= icon "heart" %> J'adore <%= @dog.name %>
+        <% end %>
+        <%= button_to swipes_path, params: { dog_id: @dog.id, liked: true, superlike: true },
+                      class: "btn btn--super", disabled: current_user.superlikes_left_today.zero?,
+                      title: "#{current_user.superlikes_left_today} Super Like restant(s) aujourd'hui" do %>
+          <%= icon "star" %> Super Like
+        <% end %>
+      <% end %>
+    </section>
   <% end %>
 
   <section class="section">

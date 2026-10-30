@@ -25,6 +25,7 @@
     <div id="messages" class="chat__messages" data-chat-target="messages">
       <%= render partial: "messages/message", collection: @messages %>
     </div>
+    <%= render "chatrooms/seen_receipt", reader: @interlocutor, seen_at: @chatroom.seen_at_by(@interlocutor) %>
   </div>
 
   <%= render "messages/form", chatroom: @chatroom, message: @message %>

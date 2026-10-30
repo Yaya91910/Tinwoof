@@ -6,11 +6,13 @@ Application web progressive (PWA) installable sur iPhone et Android, pensée mob
 
 ## Fonctionnalités
 
-- **Découvrir** : un deck de cartes à swiper au doigt (ou avec les flèches du clavier). Les chiens sont triés du plus proche au plus lointain, dans le rayon choisi. Un like réciproque déclenche l'écran « C'est un match » et ouvre une conversation.
+- **Découvrir** : un deck de cartes à swiper au doigt (ou avec les flèches du clavier). Glisser à droite pour liker, à gauche pour passer, vers le haut pour un **Super Like** (3 par jour). Un tap à gauche ou à droite de la carte fait défiler ses photos, et le bouton ↺ annule le dernier choix. Les chiens dont le maître vous a déjà liké passent en tête, avec un bandeau « X a craqué pour Pixel » ; les autres suivent, du plus proche au plus lointain. Un like réciproque déclenche l'écran « C'est un match » et ouvre une conversation.
 - **Autour de moi** : la grille des chiens à proximité, avec la distance de chacun et des filtres par sexe et par rayon.
 - **Carte** : MapLibre GL avec les tuiles OpenStreetMap d'[OpenFreeMap](https://openfreemap.org) (gratuites et sans clé), des marqueurs photo, des clusters, une projection globe quand on dézoome et le suivi de position en direct. Les chiens de la zone visible se chargent à chaque déplacement.
-- **Messages** : chat en temps réel (Turbo Streams et Action Cable), pastilles de non-lus dans la barre d'onglets et sur l'icône de l'app installée (Badging API).
-- **Profils** : galerie photo à balayer, traits de caractère, mots doux, spot de balade sur une mini-carte avec lien d'itinéraire, et partage natif (Web Share API).
+- **Messages** : chat en temps réel (Turbo Streams et Action Cable), accusé « Vu », pastilles de non-lus dans la barre d'onglets et sur l'icône de l'app installée (Badging API).
+- **Notifications en direct** : un nouveau match ou un nouveau message s'affiche instantanément, où que l'on soit dans l'app.
+- **Profils** : galerie photo à balayer, traits de caractère, mots doux, boutons « J'adore » et Super Like, spot de balade sur une mini-carte avec lien d'itinéraire, et partage natif (Web Share API).
+- **Mon profil** : la liste des maîtres qui ont craqué pour vos chiens (un like en retour et c'est un match), et une jauge de complétion qui guide vers un profil complet.
 
 ### Géolocalisation respectueuse
 
@@ -51,10 +53,11 @@ Ouvrez <http://localhost:3000> et connectez-vous avec **demo@tinwoof.app** / **t
 bin/rails test
 ```
 
-Ils couvrent les modèles (match mutuel, distances, arrondi des positions, non-lus) et les parcours principaux : swipe, carte GeoJSON, chat, droits d'accès et PWA.
+Ils couvrent les modèles (match mutuel, Super Like et quota quotidien, retour arrière, distances, arrondi des positions, non-lus, accusés de lecture) et les parcours principaux : swipe, likes reçus, carte GeoJSON, chat, droits d'accès et PWA.
 
 ## Production
 
 - `CLOUDINARY_URL` pour stocker les photos, `REDISCLOUD_URL` pour Action Cable (voir `.env.example`).
+- Le `Procfile` lance Puma et applique les migrations à chaque déploiement (phase `release` sur Heroku).
 - Les assets se compilent avec `bin/rails assets:precompile`, qui lance aussi `yarn build`.
 - Panneau d'administration sur `/admin`, réservé aux comptes `admin`.

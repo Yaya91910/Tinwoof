@@ -18,6 +18,7 @@ class DogsController < ApplicationController
     @dog = Dog.includes(:user).with_attached_photos.find(params[:id])
     @comments = @dog.comments.newest_first.includes(user: { photo_attachment: :blob })
     @comment = Comment.new
+    @swipe = current_user.swipes.find_by(dog: @dog)
   end
 
   def new

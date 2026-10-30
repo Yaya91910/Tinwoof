@@ -45,3 +45,13 @@
 .gender { font-size: 0.85em; }
 .gender--female { color: #ff5fa2; }
 .gender--male { color: #3b9eff; }
+
+.chip--hot {
+  background: var(--brand-gradient);
+  color: #fff;
+  box-shadow: var(--shadow-brand);
+  animation: hot-pop 2.4s ease-in-out infinite;
+}
+.count--hot { background: var(--brand-gradient); color: #fff; }
+
+@keyframes hot-pop { 0%, 85%, 100% { transform: scale(1); } 92% { transform: scale(1.08); } }
