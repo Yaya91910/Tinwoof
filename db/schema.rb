@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_09_05_174919) do
+ActiveRecord::Schema[7.0].define(version: 2026_10_30_100300) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -47,6 +47,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_05_174919) do
     t.bigint "second_user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "last_message_at"
     t.index ["first_user_id"], name: "index_chatrooms_on_first_user_id"
     t.index ["second_user_id"], name: "index_chatrooms_on_second_user_id"
   end
@@ -64,9 +65,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_05_174919) do
   create_table "dogs", force: :cascade do |t|
     t.string "name"
     t.string "gender"
-    t.string "age"
-    t.string "race"
-    t.string "height"
+    t.integer "age"
+    t.string "breed"
+    t.integer "height_cm"
     t.text "description"
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
@@ -74,6 +75,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_05_174919) do
     t.float "latitude"
     t.float "longitude"
     t.string "address"
+    t.json "traits", default: [], null: false
+    t.index ["latitude", "longitude"], name: "index_dogs_on_latitude_and_longitude"
     t.index ["user_id"], name: "index_dogs_on_user_id"
   end
 
@@ -83,8 +86,21 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_05_174919) do
     t.datetime "updated_at", null: false
     t.text "content"
     t.bigint "chatroom_id", null: false
+    t.datetime "read_at"
+    t.index ["chatroom_id", "read_at"], name: "index_messages_on_chatroom_id_and_read_at"
     t.index ["chatroom_id"], name: "index_messages_on_chatroom_id"
     t.index ["user_id"], name: "index_messages_on_user_id"
+  end
+
+  create_table "swipes", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "dog_id", null: false
+    t.boolean "liked", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["dog_id"], name: "index_swipes_on_dog_id"
+    t.index ["user_id", "dog_id"], name: "index_swipes_on_user_id_and_dog_id", unique: true
+    t.index ["user_id"], name: "index_swipes_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -98,11 +114,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_05_174919) do
     t.string "first_name"
     t.string "last_name"
     t.datetime "last_seen_at"
-    t.string "location"
-    t.string "ip"
     t.string "address"
     t.boolean "admin", default: false, null: false
+    t.float "latitude"
+    t.float "longitude"
+    t.datetime "located_at"
+    t.integer "search_radius_km", default: 25, null: false
+    t.text "bio"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["latitude", "longitude"], name: "index_users_on_latitude_and_longitude"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
@@ -115,4 +135,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_05_174919) do
   add_foreign_key "dogs", "users"
   add_foreign_key "messages", "chatrooms"
   add_foreign_key "messages", "users"
+  add_foreign_key "swipes", "dogs"
+  add_foreign_key "swipes", "users"
 end

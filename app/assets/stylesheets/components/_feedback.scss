@@ -1,0 +1,85 @@
+.toasts {
+  position: fixed;
+  z-index: 100;
+  top: calc(var(--safe-top) + 10px);
+  left: 50%;
+  width: calc(100% - 24px);
+  max-width: 520px;
+  transform: translateX(-50%);
+  display: grid;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 12px 12px 16px;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--ink) 92%, transparent);
+  color: var(--bg);
+  box-shadow: var(--shadow-2);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  pointer-events: auto;
+  animation: toast-in 0.4s var(--ease-spring) both;
+
+  &.is-leaving { animation: toast-out 0.25s ease-in both; }
+}
+.toast--alert .toast__icon { color: #ff8a8a; }
+.toast--notice .toast__icon { color: #ff9eb0; }
+.toast__text { flex: 1; font-weight: 600; font-size: 0.93rem; }
+.toast__close { border: 0; background: none; color: inherit; opacity: 0.6; padding: 6px; }
+
+@keyframes toast-in { from { opacity: 0; transform: translateY(-16px) scale(0.96); } }
+@keyframes toast-out { to { opacity: 0; transform: translateY(-12px); } }
+
+.empty {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  padding: 48px 28px;
+  text-align: center;
+}
+.empty--full { min-height: 100dvh; align-content: center; }
+.empty__art {
+  display: grid;
+  place-items: center;
+  width: 96px;
+  height: 96px;
+  margin-bottom: 8px;
+  border-radius: 50%;
+  background: var(--brand-soft);
+  font-size: 2.6rem;
+}
+.empty__title { font-size: 1.4rem; }
+.empty__text { max-width: 32ch; color: var(--ink-2); }
+.empty__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 10px; }
+
+.location-prompt {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 4px var(--gutter) 14px;
+  padding: 14px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-1);
+  animation: toast-in 0.4s var(--ease-spring) both;
+}
+.location-prompt__icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: var(--brand-gradient);
+  color: #fff;
+  font-size: 1.15rem;
+}
+.location-prompt--denied .location-prompt__icon { background: var(--surface-2); color: var(--ink-3); }
+.location-prompt__body { flex: 1; min-width: 0; }
+.location-prompt__title { font-weight: 700; font-size: 0.95rem; }
+.location-prompt__text { color: var(--ink-2); font-size: 0.8rem; line-height: 1.35; }

@@ -1,0 +1,9 @@
+<%= form_with model: [dog, comment], id: "comment_form", class: "composer composer--inline" do |f| %>
+  <%= avatar_tag current_user, size: 36 %>
+  <%= f.text_field :content, class: "composer__input", placeholder: "Un mot doux pour #{dog.name}…",
+                             maxlength: 500, required: true, autocomplete: "off", "aria-label": "Votre mot doux" %>
+  <button type="submit" class="composer__send" aria-label="Publier"><%= icon "paper-plane" %></button>
+  <% if comment.errors.any? %>
+    <p class="field__error composer__error"><%= comment.errors.full_messages.to_sentence %></p>
+  <% end %>
+<% end %>

@@ -1,0 +1,29 @@
+.comments { display: grid; gap: 12px; }
+.comments:has(.comment) + .comments__empty { display: none; }
+.comments__empty { color: var(--ink-3); font-size: 0.92rem; }
+
+.comment {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  animation: message-in 0.3s var(--ease-out) both;
+}
+.comment__avatar { flex: none; }
+.comment__bubble {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 14px;
+  border-radius: 6px 18px 18px 18px;
+  background: var(--surface);
+  box-shadow: var(--shadow-1);
+}
+.comment__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: baseline;
+  font-size: 0.85rem;
+  time { color: var(--ink-3); font-size: 0.75rem; }
+  a { color: var(--brand); font-weight: 600; }
+}
+.comment__text { overflow-wrap: anywhere; }

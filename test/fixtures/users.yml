@@ -1,0 +1,29 @@
+alice:
+  email: alice@example.com
+  encrypted_password: <%= Devise::Encryptor.digest(User, "password123") %>
+  first_name: Alice
+  last_name: Martin
+  latitude: 48.859
+  longitude: 2.379
+  located_at: <%= 1.hour.ago.to_fs(:db) %>
+  search_radius_km: 10
+
+bob:
+  email: bob@example.com
+  encrypted_password: <%= Devise::Encryptor.digest(User, "password123") %>
+  first_name: Bob
+  last_name: Durand
+  last_seen_at: <%= 1.minute.ago.to_fs(:db) %>
+
+carol:
+  email: carol@example.com
+  encrypted_password: <%= Devise::Encryptor.digest(User, "password123") %>
+  first_name: Carol
+  last_name: Petit
+
+admin:
+  email: admin@example.com
+  encrypted_password: <%= Devise::Encryptor.digest(User, "password123") %>
+  first_name: Ada
+  last_name: Admin
+  admin: true

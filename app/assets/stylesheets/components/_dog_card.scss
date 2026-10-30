@@ -1,0 +1,100 @@
+.dog-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding: 0 var(--gutter);
+
+  .container & { padding: 0; }
+}
+
+.dog-card {
+  position: relative;
+  display: block;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  box-shadow: var(--shadow-1);
+  color: #fff;
+  transition: transform 0.2s var(--ease-out);
+  content-visibility: auto;
+  contain-intrinsic-size: auto 240px;
+
+  &:active { transform: scale(0.97); }
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 50% 0 0;
+    background: linear-gradient(to bottom, transparent, rgba(10, 6, 5, 0.78));
+  }
+}
+
+.dog-card__photo { width: 100%; height: 100%; object-fit: cover; }
+.dog-card__photo--placeholder { font-size: 3rem; }
+
+.dog-card__distance {
+  position: absolute;
+  z-index: 1;
+  top: 10px;
+  left: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  background: rgba(20, 14, 12, 0.45);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.dog-card__body {
+  position: absolute;
+  z-index: 1;
+  inset: auto 12px 12px;
+  display: grid;
+}
+.dog-card__name { font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; }
+.dog-card__age { font-weight: 400; }
+.dog-card__breed { font-size: 0.8rem; opacity: 0.88; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+// Horizontal rail (profile).
+.rail {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 132px;
+  gap: 12px;
+  margin: 0 calc(var(--gutter) * -1);
+  padding: 4px var(--gutter) 8px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.rail__item {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  scroll-snap-align: start;
+  box-shadow: var(--shadow-1);
+
+  img, .rail__placeholder { width: 100%; height: 100%; object-fit: cover; font-size: 2.4rem; }
+  &::after { content: ""; position: absolute; inset: 55% 0 0; background: linear-gradient(transparent, rgba(0, 0, 0, 0.7)); }
+}
+.rail__label { position: absolute; z-index: 1; left: 10px; bottom: 8px; color: #fff; font-weight: 700; }
+.rail__item--add {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 8px;
+  border: 2px dashed var(--line-strong);
+  background: transparent;
+  box-shadow: none;
+  color: var(--brand);
+  font-weight: 700;
+  font-size: 0.85rem;
+  i { font-size: 1.5rem; }
+  &::after { display: none; }
+}

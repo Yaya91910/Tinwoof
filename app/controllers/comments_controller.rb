@@ -1,27 +1,22 @@
 class CommentsController < ApplicationController
-  before_action :set_dog, only: [:new, :create]
-
-  def new
-    @comment = Comment.new
-  end
-
   def create
-    @comment = Comment.new(comment_params)
-    @comment.user = current_user
-    @comment.dog = Dog.find(params[:dog_id])
+    @dog = Dog.find(params[:dog_id])
+    @comment = @dog.comments.new(comment_params.merge(user: current_user))
 
-    if @comment.save
-      redirect_to dog_path(@dog)
+    respond_to do |format|
+      if @comment.save
+        format.turbo_stream
+        format.html { redirect_to dog_path(@dog, anchor: "comments") }
+      else
+        format.turbo_stream { render :create, status: :unprocessable_entity }
+        format.html { redirect_to dog_path(@dog, anchor: "comments"), alert: @comment.errors.full_messages.to_sentence }
+      end
     end
   end
 
   private
 
   def comment_params
-    params.require(:comment).permit(:content, :user_id, :dog_id)
-  end
-
-  def set_dog
-    @dog = Dog.find(params[:dog_id])
+    params.require(:comment).permit(:content)
   end
 end

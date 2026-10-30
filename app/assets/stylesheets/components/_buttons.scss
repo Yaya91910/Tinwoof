@@ -1,0 +1,84 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  transition: transform 0.15s var(--ease-out), box-shadow 0.2s, background 0.2s, opacity 0.2s;
+  user-select: none;
+
+  &:active { transform: scale(0.97); }
+  &:disabled, &[aria-disabled="true"] { opacity: 0.55; pointer-events: none; }
+}
+
+.btn--primary {
+  background: var(--brand-gradient);
+  color: #fff;
+  box-shadow: var(--shadow-brand);
+}
+
+.btn--ghost {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
+.btn--light {
+  background: #fff;
+  color: var(--brand-strong);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+}
+
+.btn--glass {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+}
+
+.btn--danger {
+  background: color-mix(in srgb, var(--danger) 12%, transparent);
+  color: var(--danger);
+}
+
+.btn--small { min-height: 38px; padding: 0 16px; font-size: 0.9rem; }
+.btn--large { min-height: 56px; padding: 0 28px; font-size: 1.05rem; }
+.btn--block { display: flex; width: 100%; }
+
+.icon-btn {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 42px;
+  height: 42px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow-1);
+  font-size: 1.05rem;
+  transition: transform 0.15s var(--ease-out);
+
+  &:active { transform: scale(0.92); }
+}
+
+.icon-btn--brand { background: var(--brand-gradient); color: #fff; box-shadow: var(--shadow-brand); }
+
+.icon-btn--glass {
+  background: rgba(20, 14, 12, 0.35);
+  color: #fff;
+  box-shadow: none;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+// button_to wraps its button in a form: keep it out of the layout flow.
+form.button_to { display: contents; }

@@ -1,0 +1,43 @@
+# Distances from alice (48.859, 2.379): rex ≈ 0.5 km, luna ≈ 4 km, ollie ≈ 390 km (Lyon).
+rex:
+  user: bob
+  name: Rex
+  gender: male
+  age: 4
+  breed: Beagle
+  height_cm: 36
+  traits: ["playful", "sociable"]
+  address: Square Maurice Gardette, Paris
+  latitude: 48.8636
+  longitude: 2.3746
+
+luna:
+  user: carol
+  name: Luna
+  gender: female
+  age: 2
+  breed: Husky
+  traits: []
+  address: Jardin du Luxembourg, Paris
+  latitude: 48.8462
+  longitude: 2.3372
+
+ollie:
+  user: carol
+  name: Ollie
+  gender: male
+  breed: Corgi
+  traits: []
+  address: Parc de la Tête d'Or, Lyon
+  latitude: 45.7772
+  longitude: 4.855
+
+milo:
+  user: alice
+  name: Milo
+  gender: male
+  breed: Jack Russell
+  traits: []
+  address: Place de la Bastille, Paris
+  latitude: 48.8532
+  longitude: 2.3692

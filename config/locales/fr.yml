@@ -1,0 +1,65 @@
+fr:
+  activerecord:
+    models:
+      user: "Utilisateur"
+      dog: "Chien"
+      comment: "Mot doux"
+      message: "Message"
+      chatroom: "Conversation"
+      swipe: "Choix"
+    attributes:
+      user:
+        first_name: "Prénom"
+        last_name: "Nom"
+        email: "E-mail"
+        password: "Mot de passe"
+        password_confirmation: "Confirmation du mot de passe"
+        current_password: "Mot de passe actuel"
+        remember_me: "Rester connecté·e"
+        photo: "Photo de profil"
+        bio: "Bio"
+        search_radius_km: "Rayon de recherche"
+      dog:
+        name: "Nom"
+        gender: "Sexe"
+        age: "Âge"
+        breed: "Race"
+        height_cm: "Taille (cm)"
+        description: "Description"
+        address: "Lieu de balade préféré"
+        traits: "Caractère"
+        photos: "Photos"
+      comment:
+        content: "Votre mot doux"
+      message:
+        content: "Message"
+
+  dogs:
+    genders:
+      female: "Femelle"
+      male: "Mâle"
+    traits:
+      playful: "Joueur"
+      calm: "Calme"
+      sporty: "Sportif"
+      cuddly: "Câlin"
+      sociable: "Sociable"
+      curious: "Curieux"
+      shy: "Timide"
+      protective: "Protecteur"
+    create:
+      created: "%{name} est en ligne ! Place aux rencontres 🐾"
+    update:
+      updated: "Profil mis à jour."
+    destroy:
+      destroyed: "Le profil de %{name} a été supprimé."
+  locations:
+    destroy:
+      forgotten: "Position effacée. Elle ne sera plus utilisée."
+  profiles:
+    update:
+      updated: "Préférences enregistrées."
+
+  distance:
+    meters: "à %{value} m"
+    kilometers: "à %{value} km"
