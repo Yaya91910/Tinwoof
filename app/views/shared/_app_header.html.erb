@@ -1,4 +1,4 @@
-<% back, subtitle, actions = local_assigns.values_at(:back, :subtitle, :actions) %>
+<%# locals: (title:, back: nil, subtitle: nil, actions: nil) -%>
 <header class="appbar">
   <% if back %>
     <%= link_to back, class: "appbar__back icon-btn", "aria-label": "Retour" do %>

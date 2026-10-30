@@ -3,7 +3,7 @@
 <section class="auth">
   <%= render "devise/shared/auth_header", title: "Mot de passe oublié ?", subtitle: "Recevez un lien pour en choisir un nouveau." %>
   <div class="auth__card">
-    <%= simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, class: "form" }, data: { turbo: false }) do |f| %>
+    <%= simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, class: "form" }) do |f| %>
       <%= render "devise/shared/error_messages", resource: resource %>
       <%= f.input :email, required: true, autofocus: true, input_html: { autocomplete: "email", inputmode: "email" } %>
       <%= f.button :submit, "Envoyer le lien" %>
