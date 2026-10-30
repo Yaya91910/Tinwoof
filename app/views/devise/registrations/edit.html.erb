@@ -1,39 +1,36 @@
-<h2>Edit <%= resource_name.to_s.humanize %></h2>
+<% content_for :title, "Mon compte" %>
+<%= render "shared/app_header", title: "Mon compte", back: profile_path %>
+<div class="container">
+  <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: "form" }, data: { turbo: false }) do |f| %>
+    <%= render "devise/shared/error_messages", resource: resource %>
+    <fieldset class="form__group">
+      <legend class="form__legend">Identité</legend>
+      <div class="avatar-edit">
+        <%= avatar_tag resource, size: 72 %>
+        <%= f.input :photo, as: :file, input_html: { accept: "image/*" } %>
+      </div>
+      <div class="form__row">
+        <%= f.input :first_name, required: true %>
+        <%= f.input :last_name, required: true %>
+      </div>
+      <%= f.input :email, required: true, input_html: { autocomplete: "email" } %>
+    </fieldset>
+    <fieldset class="form__group">
+      <legend class="form__legend">Mot de passe</legend>
+      <%= f.input :password, label: "Nouveau mot de passe", hint: "Laissez vide pour le conserver", required: false,
+                             input_html: { autocomplete: "new-password" } %>
+      <%= f.input :password_confirmation, label: "Confirmation", required: false, input_html: { autocomplete: "new-password" } %>
+    </fieldset>
+    <fieldset class="form__group">
+      <%= f.input :current_password, hint: "Nécessaire pour valider les modifications", required: true,
+                                     input_html: { autocomplete: "current-password" } %>
+      <%= f.button :submit, "Enregistrer" %>
+    </fieldset>
+  <% end %>
 
-<%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
-  <%= f.error_notification %>
-
-  <div class="form-inputs">
-    <%= f.input :email, required: true, autofocus: true %>
-
-    <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-      <p>Currently waiting confirmation for: <%= resource.unconfirmed_email %></p>
-    <% end %>
-
-    <%= f.input :password,
-                hint: "leave it blank if you don't want to change it",
-                required: false,
-                input_html: { autocomplete: "new-password" } %>
-    <%= f.input :password_confirmation,
-                required: false,
-                input_html: { autocomplete: "new-password" } %>
-    <%= f.input  :photo, as: :file %>
-    <%= f.input :current_password,
-                hint: "we need your current password to confirm your changes",
-                required: true,
-                input_html: { autocomplete: "current-password" } %>
+  <div class="danger-zone">
+    <p class="section__hint">Supprimer votre compte efface aussi vos chiens, matchs et messages.</p>
+    <%= button_to "Supprimer mon compte", registration_path(resource_name), method: :delete, class: "btn btn--danger btn--block",
+                  form: { data: { turbo_confirm: "Supprimer définitivement votre compte ?", turbo: false } } %>
   </div>
-
-  <div class="form-actions">
-    <%= f.button :submit, "Update" %>
-  </div>
-<% end %>
-
-<h3>Cancel my account</h3>
-
-<div class="d-flex align-items-center">
-  <div>Unhappy?</div>
-  <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete, class: "btn btn-link" %>
 </div>
-
-<%= link_to "Back", :back %>

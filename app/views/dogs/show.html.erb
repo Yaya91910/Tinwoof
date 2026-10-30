@@ -1,126 +1,120 @@
-<style>
-body{
-  background-color: #FFF5E4;
-}
-</style>
+<% content_for :title, @dog.name %>
+<% content_for :body_class, "page-dog" %>
+<% distance = dog_distance_km(@dog) %>
+<% owner = @dog.user %>
+<% mine = @dog.owned_by?(current_user) %>
 
-<%# PHOTO CHIEN %>
-
-<% if @dog.photos.first.nil?  %>
-  <div class="photocontainer photo-default">
-    <div class="elementscontain">
-    <div class="supertitle">
-        <%= @dog.name %>, <%= @dog.age %> yo
-      </div>
-    <p class="particulardescri"><%= @dog.race %> <%= @dog.height %></p>
-<p>
-<% if @dog.gender == "female" %>
-        <i class="fa-solid fa-venus supericon"></i>
-      <% else %>
-        <i class="fa-solid fa-mars supericon"></i>
+<section class="gallery" data-controller="carousel">
+  <div class="gallery__track" data-carousel-target="track">
+    <% if @dog.photos.any? %>
+      <% @dog.photos.each_with_index do |photo, index| %>
+        <img class="gallery__slide" data-carousel-target="slide" src="<%= photo_url(photo, width: 900, height: 1100) %>"
+             alt="<%= "#{@dog.name}, photo #{index + 1}" %>" <%= 'loading="lazy"'.html_safe if index.positive? %> decoding="async">
       <% end %>
-      </p>
-      <p><%= link_to "Chat with #{@dog.name}", chatroom_path(@users.id), :class => "bouton-message" %></p>
-    </div>
-  </div>
-
-<% else %>
-
-  <div class="photocontainer" style="background-image: url('<%= cl_image_path @dog.photos.first.key %>') ">
-    <div class="elementscontain">
-    <div class="supertitle">
-        <%= @dog.name %>, <%= @dog.age %> yo
-      </div>
-    <p class="particulardescri"><%= @dog.race %> <%= @dog.height %></p>
-
-<p>
-<% if @dog.gender == "female" %>
-        <i class="fa-solid fa-venus supericon"></i>
-      <% else %>
-        <i class="fa-solid fa-mars supericon"></i>
-      <% end %>
-      </p>
-      <p><%= link_to "Chat with #{@dog.name}", chatroom_path(@users.id), :class => "bouton-message" %></p>
-    </div>
-  </div>
-<% end %>
-
-
-<%# --------------- %>
-
-
-<div class="d-flex justify-content-around superp">
-<span class="details2">
-    <% if @dog.gender == "female" %>
-      <strong><%= @dog.user.first_name %></strong>'s daughter
     <% else %>
-      <strong>🧍🏼<%= @dog.user.first_name %></strong>'s son
+      <div class="gallery__slide gallery__slide--placeholder" data-carousel-target="slide"><%= icon "dog" %></div>
     <% end %>
-  </span>
-
-  <span class="addressdog">
-  <i class="fa-solid fa-location-dot"></i>  <%= @dog.address.split.last %>
-  </span>
   </div>
+  <% if @dog.photos.size > 1 %>
+    <div class="gallery__dots" data-carousel-target="dots">
+      <% @dog.photos.size.times do |index| %>
+        <button type="button" class="gallery__dot" data-action="carousel#go" data-index="<%= index %>" aria-label="Photo <%= index + 1 %>"></button>
+      <% end %>
+    </div>
+  <% end %>
+  <div class="gallery__bar">
+    <%= link_to :back, class: "icon-btn icon-btn--glass", "aria-label": "Retour" do %><%= icon "chevron-left" %><% end %>
+    <div class="gallery__bar-actions">
+      <button type="button" class="icon-btn icon-btn--glass" aria-label="Partager le profil"
+              data-controller="share" data-action="share#share"
+              data-share-title-value="<%= @dog.name %> sur Tinwoof"
+              data-share-text-value="Découvre <%= @dog.name %>, <%= @dog.breed %> 🐶"
+              data-share-url-value="<%= dog_url(@dog) %>">
+        <%= icon "arrow-up-from-bracket" %>
+      </button>
+      <% if mine %>
+        <%= link_to edit_dog_path(@dog), class: "icon-btn icon-btn--glass", "aria-label": "Modifier" do %><%= icon "pen" %><% end %>
+      <% end %>
+    </div>
+  </div>
+</section>
 
-<%# DESCRIPTION %>
-<div class="dogdescription d-flex justify-content-center my-5">
-<p class="findugame"><%= @dog.description %></p>
-</div>
+<article class="sheet">
+  <header class="profile-head">
+    <h1 class="profile-head__name">
+      <%= @dog.name %><% if @dog.age %><span class="profile-head__age"><%= @dog.age %></span><% end %>
+      <%= gender_icon @dog %>
+    </h1>
+    <p class="profile-head__meta">
+      <%= @dog.breed %>
+      <% if distance %><span class="dot-sep"></span><%= icon "location-dot" %> <%= distance_label(distance) %><% end %>
+    </p>
+  </header>
 
-<%# ------------------ %>
+  <ul class="facts">
+    <li class="fact"><span class="fact__label">Sexe</span><span class="fact__value"><%= gender_label(@dog) %></span></li>
+    <li class="fact"><span class="fact__label">Âge</span><span class="fact__value"><%= dog_age_label(@dog) || "—" %></span></li>
+    <li class="fact"><span class="fact__label">Taille</span><span class="fact__value"><%= @dog.height_cm ? "#{@dog.height_cm} cm" : "—" %></span></li>
+  </ul>
 
+  <% if @dog.traits.any? %>
+    <ul class="tags">
+      <% @dog.traits.each do |trait| %>
+        <li class="tag tag--brand"><%= trait_label(trait) %></li>
+      <% end %>
+    </ul>
+  <% end %>
 
-<%# PARAMETRES %>
+  <% if @dog.description.present? %>
+    <p class="prose"><%= @dog.description %></p>
+  <% end %>
 
-  <%# ------------------------ %>
+  <section class="section">
+    <h2 class="section__title">Son humain</h2>
+    <div class="owner">
+      <%= link_to user_path(owner), class: "owner__link" do %>
+        <span class="presence <%= "presence--online" if owner.online? %>"><%= avatar_tag owner, size: 52 %></span>
+        <span>
+          <span class="owner__name"><%= owner.first_name %></span>
+          <span class="owner__status"><%= owner.online? ? "En ligne" : "Hors ligne" %></span>
+        </span>
+      <% end %>
+      <% unless mine %>
+        <%= button_to chatrooms_path(user_id: owner.id), class: "btn btn--primary btn--small" do %>
+          <%= icon "paper-plane" %> Proposer une balade
+        <% end %>
+      <% end %>
+    </div>
+  </section>
 
-<div class="wrapperp d-flex justify-content-center">
-<div class="scrolling-wrapper">
-<% @comments.each do |comment| %>
-<% if @dog.id == comment.dog_id %>
-<div class="card">
-<p class="supercomment">"<%= comment.content %>"</p>
-<p class="supericon"><i class="fa-regular fa-comment commenticon"></i></p>
-</div>
-<% end %>
-<% end %>
-</div>
-</div>
-<br>
-<h3 class="d-flex justify-content-center my-3">Want to leave a Review ?</h3>
-
-<div class="d-flex justify-content-center my-4">
-<button type="button" class="finalbutton" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  <i class="fa-regular fa-comments commentsfonthihi"></i>
-</button>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">A Review For <%= @dog.name %> ? 🐶</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <%= simple_form_for([@dog, @comment]) do |f| %>
-          <div class="form-inputs">
-            <%= f.input :content, label: false, placeholder: "Say something to #{@dog.name} ...", class: "textzone" %>
-            <%= f.submit "Send",  class: "btn w-80 d-flex justify-content-center", placeholder:"Send" %>
-          </div>
+  <% if @dog.geocoded? %>
+    <section class="section">
+      <div class="section__head">
+        <h2 class="section__title">Son spot de balade</h2>
+        <%= link_to directions_url(@dog), class: "link", target: "_blank", rel: "noopener" do %>
+          <%= icon "route" %> Itinéraire
         <% end %>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      <p class="section__hint"><%= icon "location-dot" %> <%= @dog.address %></p>
+      <div class="minimap" data-controller="map"
+           data-map-mode-value="static"
+           data-map-center-value="<%= [@dog.longitude, @dog.latitude].to_json %>"
+           data-map-markers-value="<%= [{ lng: @dog.longitude, lat: @dog.latitude, photo: dog_photo_url(@dog, width: 120, height: 120), name: @dog.name }].to_json %>"
+           <% if current_user.located? %>data-map-user-value="<%= [current_user.longitude, current_user.latitude].to_json %>"<% end %>>
       </div>
-    </div>
-  </div>
-</div>
+    </section>
+  <% end %>
 
-<div style="width: 100%; height: 300px; margin-bottom: 85px;"
-  data-controller="map"
-  data-map-markers-value="<%= @markers.to_json %>"
-  data-map-api-key-value="<%= ENV['MAPBOX_API_KEY'] %>"></div>
-</div>
+  <section class="section" id="comments">
+    <div class="section__head">
+      <h2 class="section__title">Mots doux <span class="count" id="comments_count"><%= @comments.size %></span></h2>
+    </div>
+    <% unless mine %>
+      <%= render "comments/form", dog: @dog, comment: @comment %>
+    <% end %>
+    <div class="comments" id="comments_list">
+      <%= render partial: "comments/comment", collection: @comments %>
+    </div>
+    <p class="comments__empty" <%= "hidden" if @comments.any? %>>Pas encore de mot doux. Soyez le premier !</p>
+  </section>
+</article>

@@ -1,32 +1,12 @@
-<div class="d-flex justify-content-center my-3">
-<h1 style="color:#820000">Edit <%= @dog.name %> profile !</h1>
-</div>
+<% content_for :title, "Modifier #{@dog.name}" %>
+<%= render "shared/app_header", title: "Modifier #{@dog.name}", back: dog_path(@dog) %>
+<div class="container">
+  <%= render "form", dog: @dog %>
 
-<div class="d-flex justify-content-center my-3">
-<%= cl_image_tag @dog.photos.first.key, :class => "photodogsuper", crop: :fill %>
-</div>
-
-<div class="d-flex justify-content-center my-3">
-<%= simple_form_for(@dog) do |f| %>
-  <div class="form-inputs">
-    <%= f.input :name %>
-    <%= f.input :gender %>
-    <%= f.input :age %>
-    <%= f.input :race %>
-    <%= f.input :height %>
-    <%= f.input :address, placeholder: "What is The favorite place of your dog for a walk ?" %>
-    <%= f.input :description %>
-    <%= f.input :photos, as: :file, input_html: { multiple: true } %>
-    <div class="d-flex justify-content-center my-3">
-    <%= f.button :submit %>
-    </div>
+  <div class="danger-zone">
+    <%= button_to dog_path(@dog), method: :delete, class: "btn btn--danger btn--block",
+                  form: { data: { turbo_confirm: "Supprimer définitivement le profil de #{@dog.name} ?" } } do %>
+      <%= icon "trash-can" %> Supprimer ce profil
+    <% end %>
   </div>
-<% end %>
-</div>
-
-<div class="d-flex justify-content-center my-3">
-<%= link_to "❌", dog_path(@dog), class:"noner", data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
-</div>
-
-<div class="pieger">
 </div>

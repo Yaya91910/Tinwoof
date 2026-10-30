@@ -1,0 +1,29 @@
+{
+  "id": "/",
+  "name": "Tinwoof",
+  "short_name": "Tinwoof",
+  "description": "Swipez, matchez et organisez des balades avec les chiens près de chez vous.",
+  "lang": "fr",
+  "dir": "ltr",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
+  "orientation": "portrait",
+  "background_color": "#fff7f0",
+  "theme_color": "#ff4d6d",
+  "categories": ["social", "lifestyle"],
+  "icons": [
+    <%= raw [[192, "android-icon-192x192.png"], [512, "icon-512.png"]].map { |size, file|
+      { src: image_path("icons/#{file}"), sizes: "#{size}x#{size}", type: "image/png", purpose: "any" }.to_json
+    }.join(",\n    ") %>,
+    <%= raw({ src: image_path("icons/icon-maskable-512.png"), sizes: "512x512", type: "image/png", purpose: "maskable" }.to_json) %>
+  ],
+  "shortcuts": [
+    { "name": "Découvrir", "short_name": "Découvrir", "url": "/", "icons": [{ "src": "<%= image_path "icons/android-icon-96x96.png" %>", "sizes": "96x96" }] },
+    { "name": "Carte des chiens", "short_name": "Carte", "url": "<%= map_path %>", "icons": [{ "src": "<%= image_path "icons/android-icon-96x96.png" %>", "sizes": "96x96" }] },
+    { "name": "Messages", "short_name": "Messages", "url": "<%= chatrooms_path %>", "icons": [{ "src": "<%= image_path "icons/android-icon-96x96.png" %>", "sizes": "96x96" }] }
+  ],
+  "launch_handler": { "client_mode": "navigate-existing" },
+  "prefer_related_applications": false
+}

@@ -1,0 +1,17 @@
+<div class="location-prompt" data-geolocation-target="prompt" hidden>
+  <div class="location-prompt__icon"><%= icon "location-crosshairs" %></div>
+  <div class="location-prompt__body">
+    <p class="location-prompt__title">Trouvez les chiens près de vous</p>
+    <p class="location-prompt__text">Votre position reste approximative (≈ 100 m) et n'est jamais affichée.</p>
+  </div>
+  <button type="button" class="btn btn--primary btn--small" data-action="geolocation#request" data-geolocation-target="button">
+    Activer
+  </button>
+</div>
+<div class="location-prompt location-prompt--denied" data-geolocation-target="denied" hidden>
+  <div class="location-prompt__icon"><%= icon "location-pin-lock" %></div>
+  <div class="location-prompt__body">
+    <p class="location-prompt__title">Localisation bloquée</p>
+    <p class="location-prompt__text">Autorisez-la dans les réglages du navigateur pour voir les distances.</p>
+  </div>
+</div>

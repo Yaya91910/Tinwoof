@@ -1,0 +1,12 @@
+<article class="comment" id="<%= dom_id(comment) %>">
+  <%= link_to user_path(comment.user), class: "comment__avatar", "aria-label": comment.user.first_name do %>
+    <%= avatar_tag comment.user, size: 36 %>
+  <% end %>
+  <div class="comment__bubble">
+    <p class="comment__meta">
+      <strong><%= comment.user.first_name %></strong>
+      <time datetime="<%= comment.created_at.iso8601 %>">il y a <%= time_ago_in_words(comment.created_at) %></time>
+    </p>
+    <p class="comment__text"><%= comment.content %></p>
+  </div>
+</article>

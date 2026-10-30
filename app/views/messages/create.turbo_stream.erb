@@ -1,0 +1,1 @@
+<%= turbo_stream.replace "message_form", partial: "messages/form", locals: { chatroom: @chatroom, message: @message } if @message.errors.any? %>

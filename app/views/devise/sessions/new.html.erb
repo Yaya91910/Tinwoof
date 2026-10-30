@@ -1,30 +1,14 @@
-
-<div class="background-img">
-  <h2 style="text-align: center;font-weight: bold;">Bienvenue </h2>
-    <div class="homepage">
-      <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name), data: { turbo: :false }) do |f| %>
-        <div class="form-inputs" style="text-align: center; font-weight: bold;">
-          <%= f.input :email,
-                      required: false,
-                      autofocus: true,
-                      input_html: { autocomplete: "email", class:"input-sign", placeholder: "jean@gmail.com" } %>
-          <%= f.input :password,
-                      required: false,
-                      input_html: { autocomplete: "current-password", class:"input-sign", placeholder: "password..." } %>
-          <div class="form-check remember">
-            <%= f.input :remember_me, as: :boolean if devise_mapping.rememberable? %>
-          </div>
-        </div>
-        <div class="d-flex buttons-sign">
-          <div class="form-actions button-log">
-            <%= f.button :submit, "Log in" %>
-          </div>
-          <%= link_to "Sign up", new_registration_path(resource_name), class:"signup-button" %><br />
-        </div>
-
-
-      <% end %>
-       <%= render "devise/shared/links" %>
-    </div>
-
-</div>
+<% content_for :title, "Connexion" %>
+<% content_for :body_class, "page-auth" %>
+<section class="auth">
+  <%= render "devise/shared/auth_header", title: "Content de vous revoir", subtitle: "Les copains de balade vous attendent." %>
+  <div class="auth__card">
+    <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "form" }, data: { turbo: false }) do |f| %>
+      <%= f.input :email, autofocus: true, input_html: { autocomplete: "email", inputmode: "email" } %>
+      <%= f.input :password, input_html: { autocomplete: "current-password" } %>
+      <%= f.input :remember_me, as: :boolean, input_html: { checked: true } if devise_mapping.rememberable? %>
+      <%= f.button :submit, "Se connecter" %>
+    <% end %>
+    <%= render "devise/shared/links" %>
+  </div>
+</section>

@@ -1,52 +1,31 @@
+<% content_for :title, @interlocutor.first_name %>
+<% content_for :body_class, "page-chat" %>
+<% content_for :hide_tabbar, true %>
 
-<div class="d-flex justify-content-around">
-<h1 class="title-message">Chat with <%= @chatroom.interlocutor_of(current_user).first_name %> 💫</h1>
-<div class="messager">
-<button type="button" class="finalbuttona" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  <i class="fa-regular fa-comments commentsfonthihia"></i>
-</button>
-</div>
-</div>
+<section class="chat" data-controller="chat" data-chat-read-url-value="<%= read_chatroom_path(@chatroom) %>">
+  <header class="appbar appbar--chat">
+    <%= link_to chatrooms_path, class: "appbar__back icon-btn", "aria-label": "Retour aux messages" do %>
+      <%= icon "chevron-left" %>
+    <% end %>
+    <%= link_to user_path(@interlocutor), class: "chat__peer" do %>
+      <span class="presence <%= "presence--online" if @interlocutor.online? %>"><%= avatar_tag @interlocutor, size: 40 %></span>
+      <span>
+        <span class="chat__peer-name"><%= @interlocutor.first_name %></span>
+        <span class="chat__peer-status"><%= @interlocutor.online? ? "En ligne" : "Hors ligne" %></span>
+      </span>
+    <% end %>
+  </header>
 
-
-
-<div data-controller="chatroom-subscription"
-  data-chatroom-subscription-chatroom-id-value="<%= @chatroom.id %>"
-  data-chatroom-subscription-user-id-value="<%= current_user.id %>">
-
-  <div class="card-message">
-    <div class="card-body chatroom" data-chatroom-subscription-target="messages">
-      <% @chatroom.messages.each do |message| %>
-        <%= render 'messages/message', message: message, class:"particularmessage" %>
-      <% end %>
+  <%= turbo_stream_from @chatroom %>
+  <div class="chat__scroller" data-chat-target="scroller">
+    <p class="chat__intro">
+      <%= icon "heart" %> Vous avez matché avec <%= @interlocutor.first_name %>.<br>
+      Proposez un parc, une heure, et c'est parti !
+    </p>
+    <div id="messages" class="chat__messages" data-chat-target="messages">
+      <%= render partial: "messages/message", collection: @messages %>
     </div>
   </div>
-</div>
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-body">
-        <%= simple_form_for [@chatroom, @message],
-    html: {
-    class: 'input-group form-message',
-    data: {
-    action: "turbo:submit-end->chatroom-subscription#resetForm"
-    }
-  } do |f| %>
-  <%= f.input :content,
-    as: :string,
-    label: false,
-    placeholder: 'Woof ! Say Something 🐶 ...',
-    wrapper_html: { class: 'form-outline flex-grow-1' },
-    input_html: { class: 'form-control' } %>
-    <%= f.submit "Send", class: 'btn' %>
-  <% end %>
-  </div>
-      </div>
-    </div>
-  </div>
-</div>
-<div style="height: 100px">
-</div>
+  <%= render "messages/form", chatroom: @chatroom, message: @message %>
+</section>

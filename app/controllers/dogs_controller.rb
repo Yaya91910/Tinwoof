@@ -1,71 +1,36 @@
 class DogsController < ApplicationController
-  before_action :set_dog, only: [:list, :show, :edit, :update, :destroy]
+  LIST_SIZE = 60
+
+  before_action :set_own_dog, only: %i[edit update destroy]
 
   def index
-    if params[:query].present?
-      @dogs = Dog.where(gender: params[:query])
-    else
-      @dogs = Dog.all
-    end
-
-    @users = User.all
-    @online_users = User.where("last_seen_at > ?", 5.minutes.ago)
-
-    @user = current_user
-    #@user_location = request.location.city
-
-    @localisation = request.ip
-    @user.ip = @localisation
-
-    #@user_location = "La Rochette"
-    # @dogs = Dog.near(@user_location, 100)
-  end
-
-  def new
-    @dog = Dog.new
+    @gender = params[:gender].presence_in(Dog::GENDERS)
+    @radius = params[:radius].to_i.presence_in(User::SEARCH_RADII_KM) || current_user.search_radius_km
+    @dogs = Dog.around(current_user, radius_km: @radius)
+               .not_owned_by(current_user)
+               .with_gender(@gender)
+               .includes(:user)
+               .with_attached_photos
+               .limit(LIST_SIZE)
   end
 
   def show
-    @dogs = Dog.all
-    @dog = Dog.find(params[:id])
-    @user = current_user
-    @users = User.find(params[:id])
-    # @pourshow = @dog.address.request.location.city
-
-    # If you want to localisate a user by his city
-
-      #@precise = request.location.city
-      #@user.location = @precise
-
-    # If you want to localisate a user by his IP
-    @localisation = request.ip
-    @user.ip = @localisation
-
-    # If you want to localisate a user by his IP
-
-    #@precise = "La Rochette"
-
-    @user.save!
-    @user_precise_location = {lat: Geocoder.search(@localisation).first.latitude,
-                              lng: Geocoder.search(@localisation).first.longitude,
-                              image_url: helpers.asset_url("avatar_profil.png")
-                              }
-
-    @dog_precise_location = { lat: @dog.latitude, lng: @dog.longitude, image_url: helpers.asset_url("dog.png") }
-    @markers = [@user_precise_location, @dog_precise_location]
-
+    @dog = Dog.includes(:user).with_attached_photos.find(params[:id])
+    @comments = @dog.comments.newest_first.includes(user: { photo_attachment: :blob })
     @comment = Comment.new
-    @comments = Comment.all
+  end
+
+  def new
+    @dog = current_user.dogs.new
   end
 
   def create
-    @dog = Dog.new(dog_params)
-    @dog.user = current_user
+    @dog = current_user.dogs.new(dog_params)
 
-    if @dog.save!
-      redirect_to root_path
+    if @dog.save
+      redirect_to @dog, notice: t(".created", name: @dog.name)
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -73,25 +38,32 @@ class DogsController < ApplicationController
   end
 
   def update
-    if @dog.update(dog_params)
-      redirect_to dogs_path
+    @dog.assign_attributes(dog_params.except(:photos))
+    # Attaching (rather than assigning) keeps the existing photos.
+    new_photos = Array(dog_params[:photos]).compact_blank
+    @dog.photos.attach(new_photos) if new_photos.any?
+
+    if @dog.save
+      @dog.photos.where(id: params.dig(:dog, :remove_photo_ids)).each(&:purge_later)
+      redirect_to @dog, notice: t(".updated")
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
     @dog.destroy
-    redirect_to root_path, status: :see_other
+    redirect_to profile_path, notice: t(".destroyed", name: @dog.name), status: :see_other
   end
 
   private
 
-  def set_dog
-    @dog = Dog.find(params[:id])
+  def set_own_dog
+    @dog = current_user.dogs.find(params[:id])
   end
 
   def dog_params
-    params.require(:dog).permit(:gender, :age, :race, :height, :name, :description, :address, photos: [])
+    params.require(:dog).permit(:name, :gender, :age, :breed, :height_cm, :description,
+                                :address, :latitude, :longitude, traits: [], photos: [])
   end
 end

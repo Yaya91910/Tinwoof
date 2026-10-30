@@ -1,17 +1,47 @@
-<h1>DM's 🐶 : </h1>
+<% content_for :title, "Messages" %>
+<%= render "shared/app_header", title: "Messages", subtitle: (pluralize(@chatrooms.size, "conversation", plural: "conversations") if @chatrooms.any?) %>
 
-<% @chatrooms.each do |chatroom| %>
-<div class="carde">
-<%= link_to chatroom_path(chatroom), class:"supeer" do %>
-<% if chatroom.interlocutor_of(current_user).photo.attached? %>
-  <%= cl_image_tag chatroom.interlocutor_of(current_user).photo.key, class:"photopresent" %>
+<% if @chatrooms.any? %>
+  <ul class="inbox">
+    <% @chatrooms.each do |chatroom| %>
+      <% other = chatroom.interlocutor_of(current_user) %>
+      <% last = @last_messages[chatroom.id] %>
+      <% unread = @unread_counts.fetch(chatroom.id, 0) %>
+      <li>
+        <%= link_to chatroom_path(chatroom), class: ["inbox__item", ("is-unread" if unread.positive?)].compact.join(" "),
+                                             data: { turbo_prefetch: false } do %>
+          <span class="presence <%= "presence--online" if other.online? %>"><%= avatar_tag other, size: 56 %></span>
+          <span class="inbox__body">
+            <span class="inbox__top">
+              <span class="inbox__name"><%= other.first_name %></span>
+              <% if last %>
+                <time class="inbox__time" datetime="<%= last.created_at.iso8601 %>">
+                  <%= last.created_at.today? ? l(last.created_at, format: :time) : l(last.created_at, format: :day) %>
+                </time>
+              <% end %>
+            </span>
+            <span class="inbox__bottom">
+              <span class="inbox__preview">
+                <% if last %>
+                  <%= "Vous : " if last.user_id == current_user.id %><%= last.content.truncate(60) %>
+                <% else %>
+                  <em>Nouveau match ! Dites bonjour 👋</em>
+                <% end %>
+              </span>
+              <% if unread.positive? %><span class="badge"><%= unread %></span><% end %>
+            </span>
+          </span>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
 <% else %>
-<p>No Photo available for now ..</p>
-<p class="messagedetails"><%= chatroom.interlocutor_of(current_user).first_name %></p>
-  <% end %>
+  <div class="empty">
+    <div class="empty__art">💌</div>
+    <h2 class="empty__title">Pas encore de conversation</h2>
+    <p class="empty__text">Likez des chiens : dès que c'est réciproque, la discussion s'ouvre ici.</p>
+    <div class="empty__actions">
+      <%= link_to "Commencer à swiper", root_path, class: "btn btn--primary" %>
+    </div>
+  </div>
 <% end %>
-<% end %>
-</div>
-
-<div class="pieges">
-</div>

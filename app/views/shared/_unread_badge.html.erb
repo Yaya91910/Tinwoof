@@ -1,0 +1,5 @@
+<span id="unread_badge" class="badge <%= "badge--hidden" if count.zero? %>"
+      data-controller="app-badge" data-app-badge-count-value="<%= count %>"
+      aria-label="<%= pluralize(count, "message non lu", plural: "messages non lus") %>">
+  <%= count > 99 ? "99+" : count %>
+</span>

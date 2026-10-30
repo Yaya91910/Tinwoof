@@ -1,13 +1,4 @@
-<% sender = message.user == current_user %>
-<!-- the message will display on the right side of the chat
-if the `sender` class is present -->
-<div class="message <%= 'sender' if sender %>">
-<div class="message-content">
-
-<p><%= message.content %></p>
-
-</div>
-<div class="message-infos">
-<p><span class="user-name"><%= sender ? 'You' : message.user.full_name %></span> at <%= message.created_at.strftime("%H:%M") %></p>
-</div>
+<div class="message" id="<%= dom_id(message) %>" data-controller="message" data-author-id="<%= message.user_id %>">
+  <p class="message__bubble"><%= message.content %></p>
+  <time class="message__time" datetime="<%= message.created_at.iso8601 %>"><%= l(message.created_at, format: :time) %></time>
 </div>
