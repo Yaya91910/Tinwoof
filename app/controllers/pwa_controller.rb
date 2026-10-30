@@ -8,6 +8,7 @@ class PwaController < ApplicationController
 
   def service_worker
     response.headers["Cache-Control"] = "no-cache"
-    render formats: :js, content_type: "text/javascript"
+    template = Rails.configuration.x.service_worker ? "pwa/service_worker" : "pwa/service_worker_disabled"
+    render template, formats: :js, content_type: "text/javascript"
   end
 end
