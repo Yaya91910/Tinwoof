@@ -1,0 +1,10 @@
+<% content_for :title, "Hors connexion" %>
+<% content_for :hide_tabbar, true %>
+<div class="empty empty--full">
+  <div class="empty__art">📡</div>
+  <h1 class="empty__title">Pas de réseau</h1>
+  <p class="empty__text">On dirait que la connexion a pris la poudre d'escampette. Réessayez dans un instant.</p>
+  <div class="empty__actions">
+    <a href="/" class="btn btn--primary" onclick="location.reload(); return false;">Réessayer</a>
+  </div>
+</div>

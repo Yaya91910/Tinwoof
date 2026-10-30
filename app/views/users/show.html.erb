@@ -1,61 +1,24 @@
-<style>
-body{
-  background-color: #FFF5E4;
-}
-</style>
+<% content_for :title, @user.first_name %>
+<%= render "shared/app_header", title: @user.first_name, back: :back %>
 
-<div class="d-flex justify-content-center">
-<h1 class="titlemain">Hello <%= @user.first_name %>, and Welcome !</h1>
-</div>
-<div class="d-flex justify-content-center">
-<% if @user.photo.attached? %>
-  <%= cl_image_tag @user.photo.key, crop: :fill, :class => "img_preview" %>
-<% else %>
-  <p>No Photo Available for now ... </p>
-<% end %>
-</div>
-<br>
-<div class="d-flex justify-content-center">
-<%= link_to new_dog_path, class: "newdog" do %>
-  <p><i class="fa-solid fa-plus"></i>  New Dog ?</p>
-<% end %>
-</div>
-<br>
-<div class="d-flex justify-content-center my-3">
-<i class="fa-regular fa-comment-dots supercommenticon"></i>
-</div>
-<hr>
-<br>
-<div class="d-flex justify-content-center">
-<div class="scrolling-wrapperre">
-
-  <% @dogs.each do |dog| %>
-  <% dog.comments.each do |comment| %>
-  <div class="carda">
-  <p class="contentcaroussel">"<%= comment.content %>"</p>
-  <p class="content2"> <i class="fa-solid fa-dog"></i> <%= dog.name %></p>
-  <p class="content2"> <i class="fa-regular fa-user"></i>  <%= comment.user.first_name %></p>
-  </div>
-<% end %>
-<% end %>
-</div>
-</div>
-<br>
-<div class="d-flex justify-content-center my-3">
-<i class="fa-solid fa-dog supercommenticon"></i>
-</div>
-<hr>
-<div class="divphotos d-flex justify-content-center">
-<% @dogs.each do |dog| %>
- <%= link_to edit_dog_path(dog), class: "superlink" do%>
-  <%= cl_image_tag dog.photos.first.key, crop: :fill, :class => "imgdog" %>
-<% end %>
-<% end %>
-</div>
-<div class="d-flex justify-content-center">
-  <%= link_to destroy_user_session_path, data: {turbo_method: :delete} do %>
-    <i class="fa-solid fa-right-from-bracket"></i>
+<section class="hero-profile">
+  <span class="presence presence--lg <%= "presence--online" if @user.online? %>"><%= avatar_tag @user, size: 104, class: "hero-profile__avatar" %></span>
+  <h1 class="hero-profile__name"><%= @user.first_name %></h1>
+  <% if @user.bio.present? %><p class="hero-profile__bio"><%= @user.bio %></p><% end %>
+  <%= button_to chatrooms_path(user_id: @user.id), class: "btn btn--primary" do %>
+    <%= icon "paper-plane" %> Écrire à <%= @user.first_name %>
   <% end %>
+</section>
 
-<div class="pieger">
+<div class="container">
+  <section class="section">
+    <h2 class="section__title">Ses chiens</h2>
+    <% if @dogs.any? %>
+      <div class="dog-grid">
+        <%= render partial: "dogs/card", collection: @dogs, as: :dog %>
+      </div>
+    <% else %>
+      <p class="section__hint">Pas encore de chien inscrit.</p>
+    <% end %>
+  </section>
 </div>

@@ -1,33 +1,23 @@
 class MessagesController < ApplicationController
-
   def create
-    chatroom = Chatroom.find(params[:chatroom_id])
-    @message = Message.new(message_params)
-    @message.user = current_user
-    @message.chatroom = chatroom
-    if @message.save
-    # this is the part that we need to update
-    ChatroomChannel.broadcast_to(
-    chatroom,
-    {
-    html: render_to_string(partial: "message", locals: { message: @message }),
-    # broadcast the current_user's id so it is possible to verify in the
-    # stimulus controller if it corresponds or not with
-    # the client's current_user
-    user_id: @message.user.id,
-    user_name: @message.user.full_name
-    }
-    )
-    head :ok
-    else
-    render 'chatrooms#show', status: :unprocessable_entity
-    end
-    end
+    @chatroom = current_user.chatrooms.find(params[:chatroom_id])
+    @message = @chatroom.messages.new(message_params.merge(user: current_user))
 
-    private
+    respond_to do |format|
+      if @message.save
+        # The message itself reaches both participants through the Turbo Stream broadcast.
+        format.turbo_stream { @message = Message.new }
+        format.html { redirect_to @chatroom }
+      else
+        format.turbo_stream { render :create, status: :unprocessable_entity }
+        format.html { redirect_to @chatroom, alert: @message.errors.full_messages.to_sentence }
+      end
+    end
+  end
 
-    def message_params
+  private
+
+  def message_params
     params.require(:message).permit(:content)
-    end
-
+  end
 end

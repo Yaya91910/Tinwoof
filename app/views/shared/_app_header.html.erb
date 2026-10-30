@@ -1,0 +1,17 @@
+<% back, subtitle, actions = local_assigns.values_at(:back, :subtitle, :actions) %>
+<header class="appbar">
+  <% if back %>
+    <%= link_to back, class: "appbar__back icon-btn", "aria-label": "Retour" do %>
+      <%= icon "chevron-left" %>
+    <% end %>
+  <% end %>
+  <div class="appbar__titles">
+    <h1 class="appbar__title"><%= title %></h1>
+    <% if subtitle.present? %>
+      <p class="appbar__subtitle"><%= subtitle %></p>
+    <% end %>
+  </div>
+  <% if actions.present? %>
+    <div class="appbar__actions"><%= actions %></div>
+  <% end %>
+</header>

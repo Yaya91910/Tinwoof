@@ -1,12 +1,80 @@
+<% content_for :title, "Rencontres canines près de chez vous" %>
+<% content_for :body_class, "page-landing" %>
 
-<div>
-  <div class="background">
-    <% if user_signed_in? %>
-      <%= link_to 'Welcome', dogs_path, class: "btn" %>
-    <% else %>
-      <%= link_to 'Log in', new_user_session_path, class: 'btn btn-primary mx-auto' %>
-    <% end %>
-      <div class="color-footer ">
+<section class="landing">
+  <header class="landing__nav">
+    <span class="brandmark brandmark--light"><%= icon "paw" %> tinwoof</span>
+    <%= link_to "Connexion", new_user_session_path, class: "btn btn--glass btn--small" %>
+  </header>
+
+  <div class="landing__hero">
+    <p class="landing__kicker"><%= icon "location-dot" %> Des copains de balade à deux pas</p>
+    <h1 class="landing__title">Swipez.<br>Matchez.<br><span>Promenez.</span></h1>
+    <p class="landing__lead">
+      Tinwoof présente votre chien aux toutous du quartier. Un like réciproque et la discussion s'ouvre :
+      il ne reste qu'à choisir le parc.
+    </p>
+    <div class="landing__cta">
+      <%= link_to new_user_registration_path, class: "btn btn--light btn--large" do %>
+        Créer mon compte <%= icon "arrow-right" %>
+      <% end %>
+      <%= link_to "J'ai déjà un compte", new_user_session_path, class: "btn btn--glass btn--large" %>
+    </div>
   </div>
-</div>
 
+  <div class="phone" aria-hidden="true">
+    <div class="phone__screen">
+      <div class="demo-card demo-card--back"></div>
+      <div class="demo-card">
+        <%= image_tag "tinywoof.png", class: "demo-card__photo", alt: "" %>
+        <span class="stamp stamp--like demo-card__stamp">Woof ♥</span>
+        <div class="demo-card__info">
+          <strong>Moka <span>3</span></strong>
+          <small><%= icon "location-dot" %> à 650 m · Berger australien</small>
+        </div>
+      </div>
+      <div class="demo-actions">
+        <span class="swipe-btn swipe-btn--pass"><%= icon "xmark" %></span>
+        <span class="swipe-btn swipe-btn--like"><%= icon "heart" %></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="features">
+  <article class="feature">
+    <span class="feature__icon"><%= icon "fire" %></span>
+    <h2 class="feature__title">Un swipe, un copain</h2>
+    <p class="feature__text">Glissez à droite pour un coup de cœur. Si c'est réciproque, c'est un match.</p>
+  </article>
+  <article class="feature">
+    <span class="feature__icon"><%= icon "location-crosshairs" %></span>
+    <h2 class="feature__title">Géolocalisation respectueuse</h2>
+    <p class="feature__text">Distances en direct, position arrondie à ~100 m et jamais affichée. Vous gardez la main.</p>
+  </article>
+  <article class="feature">
+    <span class="feature__icon"><%= icon "map" %></span>
+    <h2 class="feature__title">La carte des spots</h2>
+    <p class="feature__text">Repérez les parcs favoris des chiens du coin et lancez l'itinéraire en un tap.</p>
+  </article>
+  <article class="feature">
+    <span class="feature__icon"><%= icon "comment-dots" %></span>
+    <h2 class="feature__title">Chat instantané</h2>
+    <p class="feature__text">Messages en temps réel, pastilles de non-lus jusque sur l'icône de l'app.</p>
+  </article>
+</section>
+
+<section class="install-band" data-controller="install" hidden>
+  <div>
+    <h2 class="install-band__title">Tinwoof sur votre écran d'accueil</h2>
+    <p class="install-band__text" data-install-target="hint">Installez l'app : plein écran, ultra rapide, même hors connexion.</p>
+  </div>
+  <button type="button" class="btn btn--primary" data-install-target="button" data-action="install#install">
+    <%= icon "mobile-screen-button" %> Installer
+  </button>
+</section>
+
+<footer class="landing-footer">
+  <span class="brandmark"><%= icon "paw" %> tinwoof</span>
+  <p>Fait avec ♥ pour les chiens et leurs humains.</p>
+</footer>

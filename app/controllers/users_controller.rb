@@ -1,21 +1,8 @@
 class UsersController < ApplicationController
-  def index
-    @users = User.all
-    @dogs = Dog.all
-    @markers = @dogs.geocoded.map do |dog|
-      {
-        lat: dog.latitude,
-        lng: dog.longitude,
-        image_url: helpers.asset_url("dog.png"),
-        info_window: render_to_string(partial: "info_window", locals: { dog: dog })
-      }
-    end
-  end
-
   def show
-    @dogs = current_user.dogs
-    @user = current_user
-    @user.address = "La Rochette"
-    @user.save!
+    @user = User.find(params[:id])
+    return redirect_to(profile_path) if @user == current_user
+
+    @dogs = @user.dogs.with_attached_photos.newest_first
   end
 end

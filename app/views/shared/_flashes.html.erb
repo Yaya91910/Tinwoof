@@ -1,14 +1,10 @@
-<% if notice %>
-  <div class="alert alert-info alert-dismissible fade show m-1" role="alert">
-    <%= notice %>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-    </button>
-  </div>
-<% end %>
-<% if alert %>
-  <div class="alert alert-warning alert-dismissible fade show m-1" role="alert">
-    <%= alert %>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-    </button>
-  </div>
-<% end %>
+<div class="toasts" id="toasts" aria-live="polite">
+  <% flash.each do |type, message| %>
+    <% next if message.blank? %>
+    <div class="toast toast--<%= type == "alert" ? "alert" : "notice" %>" data-controller="toast" role="status">
+      <%= icon(type == "alert" ? "circle-exclamation" : "paw", class: "toast__icon") %>
+      <p class="toast__text"><%= message %></p>
+      <button type="button" class="toast__close" data-action="toast#dismiss" aria-label="Fermer"><%= icon "xmark" %></button>
+    </div>
+  <% end %>
+</div>

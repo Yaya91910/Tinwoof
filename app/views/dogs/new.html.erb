@@ -1,18 +1,5 @@
-<%= simple_form_for(@dog) do |f| %>
-  <div class="form-inputs">
-    <%= f.input :name %>
-    <%= f.input :gender, as: :select, collection: ["Male", "Female"] %>
-    <%= f.input :age %>
-    <%= f.input :race %>
-    <%= f.input :height %>
-    <%= f.input :description %>
-    <%= f.input :address %>
-    <%= f.input :photos, as: :file, input_html: { multiple: true } %>
-    <%= f.button :submit, class:"submitbtn" %>
-  </div>
-<% end %>
-
-
-
-<div style="height: 87px">
+<% content_for :title, "Nouveau chien" %>
+<%= render "shared/app_header", title: "Présentez votre chien", subtitle: "3 minutes pour lui trouver des copains", back: profile_path %>
+<div class="container">
+  <%= render "form", dog: @dog %>
 </div>

@@ -1,0 +1,31 @@
+.page-auth { background: var(--bg); }
+.page-auth .app { background: transparent; }
+
+.auth { min-height: 100dvh; }
+
+.auth__header {
+  padding: calc(var(--safe-top) + 20px) var(--gutter) 72px;
+  background: var(--brand-gradient);
+  color: #fff;
+  border-radius: 0 0 36px 36px;
+}
+.auth__title { margin-top: 28px; font-size: 2.2rem; font-weight: 800; }
+.auth__subtitle { margin-top: 6px; opacity: 0.92; }
+
+.auth__card {
+  margin: -48px var(--gutter) 24px;
+  padding: 22px 18px;
+  border-radius: var(--radius-l);
+  background: var(--surface);
+  box-shadow: var(--shadow-2);
+  position: relative;
+}
+
+.auth__links {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+  text-align: center;
+  font-size: 0.92rem;
+  a { color: var(--brand); font-weight: 600; }
+}

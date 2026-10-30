@@ -1,44 +1,41 @@
-<style>
-body{
-}
-.wrapper {
-  width: 93%;
-  margin: 0 auto;
- }
-</style>
+<% content_for :title, "Autour de moi" %>
 
+<%= render "shared/app_header",
+           title: "Autour de moi",
+           subtitle: current_user.located? ? "#{current_user.address.presence || "Votre position"} · #{@radius} km" : "Les derniers inscrits",
+           actions: link_to(icon("plus"), new_dog_path, class: "icon-btn icon-btn--brand", "aria-label": "Ajouter un chien") %>
 
-<div class="backgroundpicture">
-<div class="d-flex justify-content-center">
-<%= form_with url: dogs_path, method: :get, class: "d-flex justify-content-between" do %>
-  <%= select_tag :query, options_for_select(["Select gender", "Male", "Female"]), class:"superbttn"  %>
-    <%= submit_tag "Search", class: "dernierbouton" %>
+<%= render "shared/location_prompt" %>
+
+<%= form_with url: dogs_path, method: :get, class: "filters", data: { controller: "auto-submit", turbo_action: "replace" } do %>
+  <div class="segmented" role="radiogroup" aria-label="Sexe">
+    <% [[nil, "Tous"], ["female", "Femelles"], ["male", "Mâles"]].each do |value, label| %>
+      <label class="segmented__option">
+        <%= radio_button_tag :gender, value.to_s, @gender.to_s == value.to_s, data: { action: "auto-submit#submit" } %>
+        <span><%= label %></span>
+      </label>
+    <% end %>
+  </div>
+  <% if current_user.located? %>
+    <label class="select-pill">
+      <span class="visually-hidden">Rayon</span>
+      <%= select_tag :radius, options_for_select(User::SEARCH_RADII_KM.map { |km| ["#{km} km", km] }, @radius),
+                     data: { action: "auto-submit#submit" } %>
+    </label>
   <% end %>
+<% end %>
+
+<% if @dogs.any? %>
+  <div class="dog-grid">
+    <%= render partial: "dogs/card", collection: @dogs, as: :dog %>
   </div>
-<div class="wrapper">
-  <div class="scroll-container" style="">
-    <% @dogs.each do |dog| %>
-      <%= link_to dog_path(dog), class: "link-dog" do %>
-      <div class="card-group">
-      <div class="card my-3">
-          <% if dog.photos.length != 0 %>
-            <%= cl_image_tag dog.photos.first.key, crop: :fill %>
-          <% else %>
-            <p>no picture</p>
-          <% end %>
-            <div class="card-trip-infos">
-              <div>
-                <h2><%= dog.name  %></h2>
-                <p><i class="fa-solid fa-location-arrow"></i> <%= dog.address.split.last %></p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <% end %>
-      <% end %>
+<% else %>
+  <div class="empty">
+    <div class="empty__art">🔭</div>
+    <h2 class="empty__title">Personne dans le coin… pour l'instant</h2>
+    <p class="empty__text">Élargissez le rayon ou invitez vos voisins à inscrire leur toutou.</p>
+    <div class="empty__actions">
+      <%= link_to "Voir la carte", map_path, class: "btn btn--primary" %>
+    </div>
   </div>
-  <div class="mystere">
-</div>
-</div>
-</div>
-</div>
+<% end %>

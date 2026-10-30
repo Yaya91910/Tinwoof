@@ -1,0 +1,9 @@
+<%= turbo_stream_from current_user, :inbox %>
+<nav class="tabbar" aria-label="Navigation principale">
+  <%= tab_link "Découvrir", root_path, "fire", active: controller_name == "discover" %>
+  <%= tab_link "Autour", dogs_path, "location-dot", active: controller_name == "dogs" && action_name == "index" %>
+  <%= tab_link "Carte", map_path, "map", active: controller_name == "maps" %>
+  <%= tab_link "Messages", chatrooms_path, "comment-dots", active: controller_name.in?(%w[chatrooms messages]),
+               extra: render("shared/unread_badge", count: current_user.unread_messages_count) %>
+  <%= tab_link "Profil", profile_path, "user", active: controller_name.in?(%w[profiles users]) %>
+</nav>

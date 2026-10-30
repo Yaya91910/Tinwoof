@@ -1,0 +1,115 @@
+<% content_for :title, "Mon profil" %>
+<% content_for :body_class, "page-profile" %>
+
+<section class="hero-profile">
+  <%= avatar_tag @user, size: 104, class: "hero-profile__avatar" %>
+  <h1 class="hero-profile__name"><%= @user.full_name %></h1>
+  <p class="hero-profile__bio"><%= @user.bio.presence || "Ajoutez une bio pour vous présenter aux autres maîtres." %></p>
+  <%= link_to edit_user_registration_path, class: "chip chip--soft" do %><%= icon "pen" %> Modifier mon compte<% end %>
+
+  <dl class="stats">
+    <div class="stat"><dt>Chiens</dt><dd><%= @dogs.size %></dd></div>
+    <div class="stat"><dt>Coups de cœur</dt><dd><%= @likes_count %></dd></div>
+    <div class="stat"><dt>Matchs</dt><dd><%= @matches_count %></dd></div>
+  </dl>
+</section>
+
+<div class="container">
+  <section class="section">
+    <div class="section__head">
+      <h2 class="section__title">Mes chiens</h2>
+      <%= link_to new_dog_path, class: "link" do %><%= icon "plus" %> Ajouter<% end %>
+    </div>
+    <div class="rail">
+      <% @dogs.each do |dog| %>
+        <%= link_to dog_path(dog), class: "rail__item" do %>
+          <% if (photo = dog_photo_url(dog, width: 240, height: 300)) %>
+            <img src="<%= photo %>" alt="" loading="lazy">
+          <% else %>
+            <span class="rail__placeholder"><%= icon "dog" %></span>
+          <% end %>
+          <span class="rail__label"><%= dog.name %></span>
+        <% end %>
+      <% end %>
+      <%= link_to new_dog_path, class: "rail__item rail__item--add" do %>
+        <%= icon "plus" %><span>Nouveau chien</span>
+      <% end %>
+    </div>
+  </section>
+
+  <section class="section" id="preferences">
+    <h2 class="section__title">Préférences</h2>
+    <div class="card-list">
+      <%= form_with model: @user, url: profile_path, method: :patch, class: "setting", data: { controller: "auto-submit" } do |f| %>
+        <span class="setting__icon"><%= icon "location-crosshairs" %></span>
+        <span class="setting__body">
+          <span class="setting__title">Rayon de découverte</span>
+          <span class="setting__hint">Distance max des chiens proposés</span>
+        </span>
+        <%= f.select :search_radius_km, User::SEARCH_RADII_KM.map { |km| ["#{km} km", km] }, {},
+                     class: "setting__select", data: { action: "auto-submit#submit" }, "aria-label": "Rayon de découverte" %>
+      <% end %>
+
+      <div class="setting">
+        <span class="setting__icon"><%= icon "location-dot" %></span>
+        <span class="setting__body">
+          <span class="setting__title">Ma position</span>
+          <span class="setting__hint">
+            <% if @user.located? %>
+              <%= @user.address.presence || "Position approximative" %> · mise à jour il y a <%= time_ago_in_words(@user.located_at || @user.updated_at) %>
+            <% else %>
+              Non partagée
+            <% end %>
+          </span>
+        </span>
+        <% if @user.located? %>
+          <%= button_to "Effacer", location_path, method: :delete, class: "btn btn--ghost btn--small",
+                        form: { data: { turbo_confirm: "Effacer votre position ? Les distances ne seront plus affichées." } } %>
+        <% else %>
+          <button type="button" class="btn btn--primary btn--small" data-action="geolocation#request">Activer</button>
+        <% end %>
+      </div>
+
+      <div class="setting" data-controller="install" hidden>
+        <span class="setting__icon"><%= icon "mobile-screen-button" %></span>
+        <span class="setting__body">
+          <span class="setting__title">Installer l'application</span>
+          <span class="setting__hint" data-install-target="hint">Accès en un tap depuis l'écran d'accueil</span>
+        </span>
+        <button type="button" class="btn btn--primary btn--small" data-install-target="button" data-action="install#install">Installer</button>
+      </div>
+
+      <%= form_with model: @user, url: profile_path, method: :patch, class: "setting setting--stacked" do |f| %>
+        <span class="setting__icon"><%= icon "pen" %></span>
+        <span class="setting__body">
+          <%= f.label :bio, "Ma bio", class: "setting__title" %>
+          <%= f.text_area :bio, rows: 2, maxlength: 300, class: "field__input", placeholder: t("simple_form.placeholders.user.bio") %>
+          <%= f.submit "Enregistrer", class: "btn btn--ghost btn--small" %>
+        </span>
+      <% end %>
+    </div>
+  </section>
+
+  <% if @received_comments.any? %>
+    <section class="section">
+      <h2 class="section__title">Mots doux reçus</h2>
+      <div class="comments">
+        <% @received_comments.each do |comment| %>
+          <article class="comment">
+            <%= avatar_tag comment.user, size: 36 %>
+            <div class="comment__bubble">
+              <p class="comment__meta"><strong><%= comment.user.first_name %></strong> pour <%= link_to comment.dog.name, dog_path(comment.dog) %></p>
+              <p class="comment__text"><%= comment.content %></p>
+            </div>
+          </article>
+        <% end %>
+      </div>
+    </section>
+  <% end %>
+
+  <div class="danger-zone">
+    <%= button_to destroy_user_session_path, method: :delete, class: "btn btn--ghost btn--block", form: { data: { turbo: false } } do %>
+      <%= icon "arrow-right-from-bracket" %> Se déconnecter
+    <% end %>
+  </div>
+</div>

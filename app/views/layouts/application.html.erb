@@ -1,29 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
   <head>
-    <title>Tinwoof</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta charset="utf-8">
+    <title><%= page_title %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+    <meta name="description" content="Tinwoof : swipez, matchez et organisez des balades avec les chiens près de chez vous.">
+    <meta name="theme-color" content="#fff7f0" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#15100e" media="(prefers-color-scheme: dark)">
+    <meta name="color-scheme" content="light dark">
     <meta name="mobile-web-app-capable" content="yes">
-    <link rel="manifest" href="<%= asset_path 'manifest.json' %>">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Tinwoof">
+    <meta name="view-transition" content="same-origin">
+    <% if user_signed_in? %>
+      <meta name="current-user-id" content="<%= current_user.id %>">
+    <% end %>
+    <link rel="manifest" href="<%= pwa_manifest_path %>">
+    <%= render "shared/icons" %>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
-    <%= render 'shared/ios_pwa_links' %>
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap">
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
-    <link href="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css" rel="stylesheet">
-    <script src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js"></script>
+    <%= yield :head %>
   </head>
 
-
-  <body>
-    <% if current_user.present? %>
-      <%= render "shared/footer" %>
-    <% end %>
-    <%= render "shared/flashes" %>
-    <%= yield %>
-</div>
+  <body class="<%= yield :body_class %>"
+        <% if user_signed_in? %>
+          data-controller="geolocation"
+          data-geolocation-url-value="<%= location_path %>"
+          data-geolocation-located-value="<%= current_user.located? %>"
+          <% if current_user.located? %>
+            data-geolocation-latitude-value="<%= current_user.latitude %>"
+            data-geolocation-longitude-value="<%= current_user.longitude %>"
+          <% end %>
+        <% end %>>
+    <div class="app <%= "app--with-tabbar" if user_signed_in? && !content_for?(:hide_tabbar) %>">
+      <%= render "shared/flashes" %>
+      <main id="main" class="app__main">
+        <%= yield %>
+      </main>
+      <%= render "shared/tabbar" if user_signed_in? && !content_for?(:hide_tabbar) %>
+    </div>
   </body>
 </html>
